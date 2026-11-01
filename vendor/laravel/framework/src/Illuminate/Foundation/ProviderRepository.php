@@ -183,7 +183,7 @@ class ProviderRepository
      */
     public function writeManifest($manifest)
     {
-        if (! is_writable($dirname = dirname($this->manifestPath))) {
+        if (! is_dir($dirname = dirname($this->manifestPath))) {
             throw new Exception("The {$dirname} directory must be present and writable.");
         }
 
