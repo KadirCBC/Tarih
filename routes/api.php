@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 | Flutter / React Native mobil istemcileri için optimize edilmiş JSON API uç noktaları.
 */
 
+// IIIF (International Image Interoperability Framework) Image API 3.0 Uç Noktaları
+Route::prefix('iiif')->group(function () {
+    Route::get('/image/{id}/info.json', [\App\Http\Controllers\Api\IiifImageApiController::class, 'info']);
+    Route::get('/image/{id}/{region}/{size}/{rotation}/{quality}.{format}', [\App\Http\Controllers\Api\IiifImageApiController::class, 'renderImage']);
+});
+
 Route::prefix('v1')->group(function () {
 
     // 1. Kimlik Doğrulama (Sanctum Auth)
@@ -39,12 +45,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/mints/{slug}', [MintApiController::class, 'show']);
     Route::get('/geo/boundaries', [\App\Http\Controllers\Api\GeoApiController::class, 'boundaries']);
 
-    // 3. Sikke Kataloğu ve Görsel Eşleştirme (AI Identify & Recognition - Kota Korumalı)
+    // 3. Sikke Kataloğu ve Görsel Eşleştirme (AI Identify & Recognition - Kota ve Rate Limit Korumalı)
     Route::get('/coins', [CoinApiController::class, 'index']);
     Route::post('/coins/identify', [\App\Http\Controllers\Api\CoinRecognitionController::class, 'recognize'])
-        ->middleware(\App\Http\Middleware\CheckScanQuota::class);
+        ->middleware(['throttle:ai_identification', \App\Http\Middleware\CheckScanQuota::class]);
     Route::post('/coins/recognize', [\App\Http\Controllers\Api\CoinRecognitionController::class, 'recognize'])
-        ->middleware(\App\Http\Middleware\CheckScanQuota::class);
+        ->middleware(['throttle:ai_identification', \App\Http\Middleware\CheckScanQuota::class]);
     Route::get('/coins/{slug}', [CoinApiController::class, 'show']);
     Route::post('/coins/{slug}/verify-physical', [CoinApiController::class, 'verifyPhysical']);
 
@@ -109,5 +115,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/convert', [\App\Http\Controllers\Api\RegnalCalculatorApiController::class, 'convert']);
         Route::get('/reference-data', [\App\Http\Controllers\Api\RegnalCalculatorApiController::class, 'referenceData']);
     });
+
+    // 10. Darp Hataları Rehberi (Mint Error Types)
+    Route::get('/mint-errors', [\App\Http\Controllers\Api\MintErrorApiController::class, 'index']);
 
 });

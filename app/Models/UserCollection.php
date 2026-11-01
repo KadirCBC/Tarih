@@ -26,6 +26,9 @@ class UserCollection extends Model
         'user_id',
         'coin_id',
         'user_condition',
+        'has_mint_error',
+        'mint_error_type_id',
+        'mint_error_notes',
         'custom_image_path',
         'purchase_price_usd',
         'purchase_date',
@@ -42,6 +45,8 @@ class UserCollection extends Model
         return [
             'user_id' => 'integer',
             'coin_id' => 'integer',
+            'has_mint_error' => 'boolean',
+            'mint_error_type_id' => 'integer',
             'user_condition' => ConditionGrade::class,
             'purchase_price_usd' => 'decimal:2',
             'purchase_date' => 'date',
@@ -65,6 +70,14 @@ class UserCollection extends Model
     }
 
     /**
+     * Sikkenin sahip olduğu darp hatası türü (Varsa).
+     */
+    public function mintErrorType(): BelongsTo
+    {
+        return $this->belongsTo(MintErrorType::class, 'mint_error_type_id');
+    }
+
+    /**
      * Kullanıcının yüklediği özel sikke fotoğrafının URL'i.
      */
     public function getCustomImageUrlAttribute(): ?string
@@ -78,6 +91,18 @@ class UserCollection extends Model
         }
 
         return Storage::disk('public')->url($this->custom_image_path);
+    }
+
+    /**
+     * Dinamik filigran uygulanmış güvenli görsel URL'i (Orijinal bozulmadan yasal filigran basılır).
+     */
+    public function getWatermarkedImageUrlAttribute(): ?string
+    {
+        if (empty($this->custom_image_path)) {
+            return null;
+        }
+
+        return route('image.watermark', ['path' => $this->custom_image_path]);
     }
 
     /**

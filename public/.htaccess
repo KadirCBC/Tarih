@@ -18,6 +18,18 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # ----------------------------------------------------------------------
+    # 1.1 DOĞRUDAN RESİM HOTLINK KORUMASI (Görsel ve Bant Genişliği Hırsızlığına Karşı)
+    # ----------------------------------------------------------------------
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?localhost [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?127\.0\.0\.1 [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?tarih\.numis [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://.*google\. [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://.*bing\. [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://.*yandex\. [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [F,NC,L]
+
     # Sondaki eğik çizgiyi kaldır (Trailing Slash)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

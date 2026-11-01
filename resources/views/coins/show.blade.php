@@ -67,6 +67,13 @@
         ]
     }
     </script>
+
+    @if(isset($nomismaJsonLd))
+    <!-- Nomisma.org Linked Open Data RDF/JSON-LD Standardı (American Numismatic Society & British Museum) -->
+    <script type="application/ld+json">
+    {!! json_encode($nomismaJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    </script>
+    @endif
 @endsection
 
 @section('content')
@@ -225,14 +232,19 @@
                 </div>
 
                 <!-- Görsel -->
-                <div class="aspect-square bg-slate-950 p-6 flex items-center justify-center border-b border-slate-800">
+                <div class="aspect-square bg-slate-950 p-6 flex flex-col items-center justify-center border-b border-slate-800 relative group">
                     @php
                         $obverseImg = $coin->images->firstWhere('image_type.value', 'obverse') ?? $coin->primaryImage;
                     @endphp
                     @if($obverseImg)
                         <img src="{{ $obverseImg->url }}" 
                              alt="{{ $coin->title }} - Ön Yüz" 
-                             class="max-h-full max-w-full object-contain rounded-lg shadow-2xl hover:scale-105 transition duration-300">
+                             class="max-h-[82%] max-w-full object-contain rounded-lg shadow-2xl hover:scale-105 transition duration-300">
+                        <button type="button" 
+                                onclick="openDeepZoom('{{ $obverseImg->url }}', '{{ $obverseImg->id ?? 1 }}', 'Ön Yüz (Avers)')" 
+                                class="mt-3 text-[11px] font-bold text-amber-300 hover:text-white flex items-center gap-1.5 py-1 px-3 rounded-lg bg-slate-800/90 hover:bg-amber-600 border border-slate-700 hover:border-amber-500 transition shadow-lg">
+                            <span>🔬</span> Deep Zoom & Mikroskobik İnceleme (IIIF)
+                        </button>
                     @else
                         <div class="text-slate-600 text-xs text-center font-mono">
                             Ön yüz detay fotoğrafı eklenmemiş
@@ -286,14 +298,19 @@
                 </div>
 
                 <!-- Görsel -->
-                <div class="aspect-square bg-slate-950 p-6 flex items-center justify-center border-b border-slate-800">
+                <div class="aspect-square bg-slate-950 p-6 flex flex-col items-center justify-center border-b border-slate-800 relative group">
                     @php
                         $reverseImg = $coin->images->firstWhere('image_type.value', 'reverse') ?? $coin->primaryImage;
                     @endphp
                     @if($reverseImg)
                         <img src="{{ $reverseImg->url }}" 
                              alt="{{ $coin->title }} - Arka Yüz" 
-                             class="max-h-full max-w-full object-contain rounded-lg shadow-2xl hover:scale-105 transition duration-300">
+                             class="max-h-[82%] max-w-full object-contain rounded-lg shadow-2xl hover:scale-105 transition duration-300">
+                        <button type="button" 
+                                onclick="openDeepZoom('{{ $reverseImg->url }}', '{{ $reverseImg->id ?? 2 }}', 'Arka Yüz (Revers)')" 
+                                class="mt-3 text-[11px] font-bold text-amber-300 hover:text-white flex items-center gap-1.5 py-1 px-3 rounded-lg bg-slate-800/90 hover:bg-amber-600 border border-slate-700 hover:border-amber-500 transition shadow-lg">
+                            <span>🔬</span> Deep Zoom & Mikroskobik İnceleme (IIIF)
+                        </button>
                     @else
                         <div class="text-slate-600 text-xs text-center font-mono">
                             Arka yüz detay fotoğrafı eklenmemiş
@@ -626,7 +643,27 @@
                         Envanterime Kaydet
                     </button>
                 </div>
-                <div class="sm:col-span-2 lg:col-span-5 pt-2">
+                <div class="sm:col-span-2 lg:col-span-5 pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <label class="flex items-center gap-2 cursor-pointer text-xs text-amber-300 font-semibold select-none">
+                        <input type="checkbox" id="has_mint_error_checkbox" name="has_mint_error" value="1" onchange="document.getElementById('mint_error_options').classList.toggle('hidden', !this.checked)" class="rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-amber-500">
+                        <span>⚡ Bu Sikkede Darp Hatası Var mı? (Off-Center, Brockage, Çift Darp vb.)</span>
+                    </label>
+
+                    <div id="mint_error_options" class="hidden flex-1 flex items-center gap-2 w-full sm:w-auto">
+                        <select name="mint_error_type_id" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                            <option value="">-- Hata Türü Seçin --</option>
+                            <option value="1">Off-Center Strike (Merkezleme Kayması - 1.5x-4x)</option>
+                            <option value="2">Double Die (Çift Darp - 2x-5x)</option>
+                            <option value="3">Brockage (Ters / Ayna Baskı - 5x-10x)</option>
+                            <option value="4">Die Crack (Kalıp Çatlağı - 1.3x-2.5x)</option>
+                            <option value="5">Overstrike (Yeniden Basım - 3x-8x)</option>
+                            <option value="6">Clipped Planchet (Kesik Pul - 1.5x-3x)</option>
+                        </select>
+                        <input type="text" name="mint_error_notes" placeholder="Örn: %35 sağa kayık" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                        <a href="{{ route('mint-errors.index') }}" target="_blank" class="text-[11px] text-amber-400 hover:text-amber-300 shrink-0 font-medium">Rehber &rarr;</a>
+                    </div>
+                </div>
+                <div class="sm:col-span-2 lg:col-span-5 pt-1">
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-300 select-none">
                         <input type="checkbox" name="legal_declaration" value="1" class="rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-amber-500">
                         <span>Bu görselin yasal haklarına sahibim / kişisel koleksiyon veya açık kaynak amaçlı ekliyorum (2863 sayılı kanun hükümleri saklıdır).</span>
@@ -801,7 +838,143 @@
         })();
     </script>
 
-    <!-- 5. BENZER / İLGİLİ SİKKELER -->
+    <!-- 6. NOMISMA.ORG LINKED OPEN DATA & AKADEMİK ATIF (BIBTEX / APA) -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-12 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+            <div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-2">
+                    <span>🌐</span> Linked Open Data & Academic Interoperability
+                </div>
+                <h3 class="font-numis text-xl font-bold text-slate-100 tracking-wider flex items-center gap-2">
+                    NOMISMA.ORG VE AKADEMİK ATIF PAYLAŞIMI
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">
+                    Bu sikke verisi Nomisma.org, British Museum ve American Numismatic Society (ANS) ontolojilerine uyumlu RDF/JSON-LD olarak yayımlanmaktadır.
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="{{ url('/api/iiif/image/' . ($coin->primaryImage->id ?? 1) . '/info.json') }}" target="_blank" class="px-3 py-1.5 bg-slate-950 border border-slate-700 hover:border-amber-400 text-amber-300 rounded-lg text-xs font-mono transition flex items-center gap-1.5">
+                    <span>⚡ IIIF Image API 3.0</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Sol: Nomisma Ontolojisi Eşleştirmeleri -->
+            <div class="lg:col-span-5 space-y-3">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                    Nomisma.org Karşılıkları
+                </h4>
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs space-y-2.5 font-mono">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500">Birim (Denomination):</span>
+                        <a href="{{ $nomismaJsonLd['nmo:hasDenomination']['@id'] ?? 'http://nomisma.org/id/denarius' }}" target="_blank" class="text-amber-400 hover:underline truncate max-w-[200px]">
+                            {{ $coin->denomination }} &nearr;
+                        </a>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500">Maden (Material):</span>
+                        <a href="{{ $nomismaJsonLd['nmo:hasMaterial']['@id'] ?? 'http://nomisma.org/id/ar' }}" target="_blank" class="text-amber-400 hover:underline">
+                            {{ ucfirst($coin->metal->value) }} &nearr;
+                        </a>
+                    </div>
+                    @if($coin->mint)
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500">Darphane (Mint):</span>
+                            <a href="{{ $nomismaJsonLd['nmo:hasMint']['@id'] ?? '#' }}" target="_blank" class="text-amber-400 hover:underline">
+                                {{ $coin->mint->name }} &nearr;
+                            </a>
+                        </div>
+                    @endif
+                    @if($coin->ruler)
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500">Otorite (Authority):</span>
+                            <a href="{{ $nomismaJsonLd['nmo:hasAuthority']['@id'] ?? '#' }}" target="_blank" class="text-amber-400 hover:underline">
+                                {{ $coin->ruler->name }} &nearr;
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Sağ: Akademik Alıntı Kopyalama (BibTeX & APA) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+                <div>
+                    <!-- Sekmeler -->
+                    <div class="flex items-center gap-2 mb-3">
+                        <button type="button" onclick="switchCitationTab('apa')" id="btn-cite-apa" class="px-3 py-1 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition">
+                            APA (7. Baskı)
+                        </button>
+                        <button type="button" onclick="switchCitationTab('bibtex')" id="btn-cite-bibtex" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition">
+                            BibTeX
+                        </button>
+                    </div>
+
+                    <!-- APA Kutusu -->
+                    <div id="box-cite-apa" class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-200 font-serif leading-relaxed select-all">
+                        {{ $apaCitation ?? '' }}
+                    </div>
+
+                    <!-- BibTeX Kutusu -->
+                    <div id="box-cite-bibtex" class="hidden bg-slate-950 border border-slate-800 rounded-xl p-3 text-[11px] text-amber-300 font-mono leading-relaxed select-all whitespace-pre overflow-x-auto max-h-36">
+{{ $bibtexCitation ?? '' }}
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <span id="copy-status" class="text-xs text-emerald-400 font-medium opacity-0 transition duration-300">
+                        ✓ Panoya kopyalandı!
+                    </span>
+                    <button type="button" onclick="copyActiveCitation()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg text-xs transition border border-slate-700 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span>Alıntıyı Kopyala</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. OPENSEADRAGON DEEP ZOOM MODAL (IIIF Image API 3.0) -->
+    <div id="deepZoomModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col">
+        <!-- Modal Üst Çubuk -->
+        <div class="px-6 py-3 border-b border-slate-800 bg-slate-950/90 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-amber-400 text-sm font-bold flex items-center gap-1.5">
+                    <span>🔬</span> <span id="deepZoomTitle">Mikroskobik İnceleme</span>
+                </span>
+                <span class="text-[11px] bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-mono">
+                    IIIF Image API 3.0
+                </span>
+            </div>
+            
+            <!-- Kontrol Butonları -->
+            <div class="flex items-center gap-2">
+                <button type="button" id="osd-zoom-in" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold" title="Yakınlaştır">+</button>
+                <button type="button" id="osd-zoom-out" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold" title="Uzaklaştır">-</button>
+                <button type="button" id="osd-home" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold" title="Sıfırla">⌂</button>
+                <button type="button" id="osd-rotate-left" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold" title="Sola Döndür">↺</button>
+                <button type="button" id="osd-rotate-right" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold" title="Sağa Döndür">↻</button>
+                <button type="button" onclick="closeDeepZoom()" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-800 text-white rounded-lg text-xs font-bold ml-2" title="Kapat">✕ Kapat</button>
+            </div>
+        </div>
+
+        <!-- OpenSeadragon Görüntüleyici Konteyneri -->
+        <div class="flex-1 relative bg-slate-950 overflow-hidden">
+            <div id="openseadragon-canvas" class="w-full h-full"></div>
+
+            <!-- Sol Alt: Mikroskobik Nümizmatik İpucu Rozeti -->
+            <div class="absolute bottom-5 left-5 bg-slate-900/90 border border-slate-700 p-3 rounded-xl max-w-sm text-xs text-slate-300 pointer-events-none shadow-xl">
+                <div class="font-bold text-amber-400 mb-1 flex items-center gap-1">
+                    <span>🔍</span> Mikroskobik Yüzey Analizi
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    Fare tekerleğiyle mikroskobik derinlikte kılcal darp akış çizgilerini (flow lines), patina kristalleşmesini ve kalıp kırıklarını (die breaks) inceleyebilirsiniz.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. BENZER / İLGİLİ SİKKELER -->
     @if($similarCoins->count() > 0)
         <div>
             <h3 class="font-numis text-xl font-bold text-slate-100 tracking-wider mb-6 flex items-center gap-2">
@@ -831,5 +1004,102 @@
     @endif
 
 </div>
+
+<!-- OpenSeadragon CDN (Deep Zoom & IIIF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
+
+<script>
+let osdViewer = null;
+let currentCitationTab = 'apa';
+
+function switchCitationTab(tab) {
+    currentCitationTab = tab;
+    const btnApa = document.getElementById('btn-cite-apa');
+    const btnBibtex = document.getElementById('btn-cite-bibtex');
+    const boxApa = document.getElementById('box-cite-apa');
+    const boxBibtex = document.getElementById('box-cite-bibtex');
+
+    if (tab === 'apa') {
+        btnApa.classList.remove('text-slate-400');
+        btnApa.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+        btnBibtex.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+        btnBibtex.classList.add('text-slate-400');
+        boxApa.classList.remove('hidden');
+        boxBibtex.classList.add('hidden');
+    } else {
+        btnBibtex.classList.remove('text-slate-400');
+        btnBibtex.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+        btnApa.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+        btnApa.classList.add('text-slate-400');
+        boxBibtex.classList.remove('hidden');
+        boxApa.classList.add('hidden');
+    }
+}
+
+function copyActiveCitation() {
+    const textToCopy = currentCitationTab === 'apa' 
+        ? document.getElementById('box-cite-apa').innerText.trim()
+        : document.getElementById('box-cite-bibtex').innerText.trim();
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const status = document.getElementById('copy-status');
+        status.classList.remove('opacity-0');
+        setTimeout(() => status.classList.add('opacity-0'), 2500);
+    });
+}
+
+function openDeepZoom(imageUrl, imageId, title) {
+    document.getElementById('deepZoomTitle').textContent = `${title} - Mikroskobik Yüzey Analizi`;
+    document.getElementById('deepZoomModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    if (osdViewer) {
+        osdViewer.destroy();
+    }
+
+    // IIIF Image API 3.0 info.json veya yüksek çözünürlüklü fallback tileSource
+    const iiifEndpoint = `/api/iiif/image/${imageId}/info.json`;
+
+    osdViewer = OpenSeadragon({
+        id: "openseadragon-canvas",
+        prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/",
+        tileSources: {
+            type: 'image',
+            url: imageUrl,
+            buildPyramid: true
+        },
+        showNavigator: true,
+        navigatorPosition: "BOTTOM_RIGHT",
+        showRotationControl: true,
+        animationTime: 0.5,
+        blendTime: 0.1,
+        constrainDuringPan: true,
+        maxZoomPixelRatio: 6,
+        minZoomImageRatio: 0.8,
+        visibilityRatio: 1.0,
+        zoomInButton: "osd-zoom-in",
+        zoomOutButton: "osd-zoom-out",
+        homeButton: "osd-home",
+        rotateLeftButton: "osd-rotate-left",
+        rotateRightButton: "osd-rotate-right"
+    });
+}
+
+function closeDeepZoom() {
+    document.getElementById('deepZoomModal').classList.add('hidden');
+    document.body.style.overflow = '';
+    if (osdViewer) {
+        osdViewer.destroy();
+        osdViewer = null;
+    }
+}
+
+// ESC tuşuyla modalı kapatma
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeepZoom();
+    }
+});
+</script>
 @endsection
 

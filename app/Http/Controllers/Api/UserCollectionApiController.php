@@ -74,6 +74,9 @@ class UserCollectionApiController extends Controller
         $validated = $request->validate([
             'coin_id' => ['required', 'integer', 'exists:coins,id'],
             'user_condition' => ['required', new Enum(ConditionGrade::class)],
+            'has_mint_error' => ['nullable', 'boolean'],
+            'mint_error_type_id' => ['nullable', 'exists:mint_error_types,id'],
+            'mint_error_notes' => ['nullable', 'string', 'max:500'],
             'purchase_price_usd' => ['nullable', 'numeric', 'min:0'],
             'purchase_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string', 'max:1000', new \App\Rules\NoIllegalTradingRule],
@@ -96,6 +99,9 @@ class UserCollectionApiController extends Controller
         $item = $request->user()->collections()->create([
             'coin_id' => $validated['coin_id'],
             'user_condition' => $validated['user_condition'],
+            'has_mint_error' => $request->boolean('has_mint_error'),
+            'mint_error_type_id' => $validated['mint_error_type_id'] ?? null,
+            'mint_error_notes' => $validated['mint_error_notes'] ?? null,
             'custom_image_path' => $customImagePath,
             'purchase_price_usd' => $validated['purchase_price_usd'] ?? null,
             'purchase_date' => $validated['purchase_date'] ?? null,

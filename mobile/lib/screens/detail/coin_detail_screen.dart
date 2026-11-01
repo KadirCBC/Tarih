@@ -32,6 +32,8 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> with SingleTickerPr
   final List<String> _conditionGrades = ['Poor', 'Fine', 'VF', 'XF', 'UNC'];
 
   bool _isAddingToCollection = false;
+  bool _hasMintError = false;
+  String _selectedMintError = 'Off-Center Strike (%30 Kayma)';
 
   @override
   void initState() {
@@ -91,7 +93,9 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> with SingleTickerPr
       condition: selectedGrade,
       coinTitle: _coin!.title,
       coinImage: _coin!.primaryImageUrl,
-      notes: 'Mobil envanter üzerinden eklendi.',
+      notes: _hasMintError
+          ? '⚡ Darp Hatası: $_selectedMintError'
+          : 'Mobil envanter üzerinden eklendi.',
     );
 
     if (!mounted) return;
@@ -433,7 +437,77 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> with SingleTickerPr
                         : ((coin.period?.slug.contains('grek') == true || coin.period?.slug.contains('hellen') == true) ? 'seleucid' : 'roman'),
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
+
+                  // Darp Hatası Onay Kutusu ve Seçici
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF131D31),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: _hasMintError ? Colors.amber : Colors.white12,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: _hasMintError,
+                              activeColor: Colors.amber,
+                              checkColor: Colors.black,
+                              onChanged: (val) {
+                                setState(() => _hasMintError = val ?? false);
+                              },
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() => _hasMintError = !_hasMintError);
+                                },
+                                child: const Text(
+                                  'Bu sikkede Darp Hatası var mı? (Off-Center, Brockage vb.)',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (_hasMintError) ...[
+                          const SizedBox(height: 8),
+                          DropdownButtonFormField<String>(
+                            value: _selectedMintError,
+                            dropdownColor: const Color(0xFF0F172A),
+                            style: const TextStyle(color: Colors.amber, fontSize: 12, fontWeight: FontWeight.bold),
+                            decoration: InputDecoration(
+                              labelText: 'Tespit Edilen Darp Hatası',
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 11),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            items: const [
+                              DropdownMenuItem(value: 'Off-Center Strike (%30 Kayma)', child: Text('Off-Center Strike (Merkez Kayması - 1.5x-4x)')),
+                              DropdownMenuItem(value: 'Double Die (Çift Darp)', child: Text('Double Die (Çift Darp - 2x-5x)')),
+                              DropdownMenuItem(value: 'Brockage (Ters Baskı)', child: Text('Brockage (Ters / Ayna Baskı - 5x-10x)')),
+                              DropdownMenuItem(value: 'Die Crack (Kalıp Çatlağı)', child: Text('Die Crack (Kalıp Çatlağı - 1.3x-2.5x)')),
+                              DropdownMenuItem(value: 'Overstrike (Yeniden Basım)', child: Text('Overstrike (Yeniden Basım - 3x-8x)')),
+                            ],
+                            onChanged: (val) {
+                              if (val != null) setState(() => _selectedMintError = val);
+                            },
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
 
                   // 7. "KOLEKSİYONUMA EKLE" BUTONU
                   SizedBox(

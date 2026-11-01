@@ -14,7 +14,16 @@ Route::get('/search', [CoinController::class, 'search'])->name('coins.search');
 Route::get('/harita', [\App\Http\Controllers\MapController::class, 'index'])->name('map.index');
 Route::get('/tarih-hesaplayici', [\App\Http\Controllers\RegnalCalculatorController::class, 'index'])->name('calculator.index');
 Route::post('/tarih-hesaplayici', [\App\Http\Controllers\RegnalCalculatorController::class, 'calculate'])->name('calculator.calculate');
+Route::get('/darp-hatalari', [\App\Http\Controllers\MintErrorController::class, 'index'])->name('mint-errors.index');
 Route::view('/offline', 'offline')->name('offline');
+
+// Güvenlik & Scraper Bot Koruması: Cloudflare Turnstile Doğrulama
+Route::post('/security/verify-turnstile', [\App\Http\Controllers\SecurityChallengeController::class, 'verify'])->name('security.verify-turnstile');
+
+// Dinamik Filigranlı Görsel Teslim Ucu (Orijinal Dosya Bozulmadan)
+Route::get('/watermark/{path}', [\App\Http\Controllers\WatermarkedImageController::class, 'show'])
+    ->where('path', '.*')
+    ->name('image.watermark');
 
 // Dinamik Sitemap (spatie/laravel-sitemap)
 Route::get('/sitemap.xml', function (SitemapGeneratorService $service) {

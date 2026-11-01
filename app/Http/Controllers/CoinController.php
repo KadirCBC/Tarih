@@ -128,9 +128,9 @@ class CoinController extends Controller
     }
 
     /**
-     * Sikke detay sayfası (Akademik bilgiler, lejant çözümlemeleri, piyasa bantları, çapraz referanslar).
+     * Sikke detay sayfası (Akademik bilgiler, lejant çözümlemeleri, piyasa bantları, çapraz referanslar, Nomisma.org Linked Data).
      */
-    public function show(Coin $coin)
+    public function show(Coin $coin, \App\Services\AcademicLinkedDataService $linkedDataService)
     {
         $coin->incrementViews();
 
@@ -149,6 +149,11 @@ class CoinController extends Controller
         $conditionGrades = ConditionGrade::cases();
         $valuationMap = $coin->valuations->keyBy(fn ($item) => $item->condition_grade->value ?? $item->condition_grade);
 
+        // Nomisma.org uyumlu Linked Open Data (JSON-LD) ve Akademik Atıflar
+        $nomismaJsonLd = $linkedDataService->generateNomismaJsonLd($coin);
+        $bibtexCitation = $linkedDataService->generateBibTeX($coin);
+        $apaCitation = $linkedDataService->generateAPA($coin);
+
         // İlgili / benzer sikkeler (Aynı hükümdar veya aynı dönem)
         $similarCoins = Coin::query()
             ->where('id', '!=', $coin->id)
@@ -163,6 +168,14 @@ class CoinController extends Controller
             ->limit(4)
             ->get();
 
-        return view('coins.show', compact('coin', 'conditionGrades', 'valuationMap', 'similarCoins'));
+        return view('coins.show', compact(
+            'coin',
+            'conditionGrades',
+            'valuationMap',
+            'similarCoins',
+            'nomismaJsonLd',
+            'bibtexCitation',
+            'apaCitation'
+        ));
     }
 }

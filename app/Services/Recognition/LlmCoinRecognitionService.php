@@ -40,11 +40,23 @@ class LlmCoinRecognitionService
         // 3. LLM'in tespit ettiği parametrelerle veritabanında hibrit arama yap
         $dbMatches = $this->findDatabaseMatches($llmResult);
 
+        $detectedError = $llmResult['detected_error'] ?? null;
+        $hasMintError = !empty($llmResult['has_mint_error']) && $detectedError !== 'None' && !empty($detectedError);
+
         return [
             'method' => 'multimodal_llm_vision',
             'model_used' => $this->model,
             'extracted_metadata' => $llmResult,
             'confidence_score' => $llmResult['confidence_score'] ?? 85,
+            'has_mint_error' => $hasMintError,
+            'detected_error' => $hasMintError ? $detectedError : null,
+            'mint_error_details' => $hasMintError ? [
+                'type' => $llmResult['mint_error_type'] ?? 'off-center',
+                'label' => $detectedError,
+                'confidence' => $llmResult['mint_error_confidence'] ?? 91,
+                'description' => $llmResult['mint_error_description'] ?? 'Sikke pulunda darp hatası tespit edilmiştir.',
+                'value_multiplier' => $llmResult['estimated_value_multiplier'] ?? '1.5x - 3.0x',
+            ] : null,
             'identified' => !empty($dbMatches),
             'database_matches' => $dbMatches,
         ];
@@ -77,8 +89,15 @@ Görselleri nümizmatik titizlikle incele ve YALNIZCA aşağıdaki JSON şeması
   "reverse_legend": "Arka yüzde okunan Latince/Grekçe/Arapça sikke yazısı",
   "catalog_references": ["Muhtemel RIC, RPC, BMC, Crawford veya Sear no"],
   "historical_iconography": "Ön ve arka yüz tasvir analizi özeti",
-  "confidence_score": 88
+  "confidence_score": 88,
+  "has_mint_error": true,
+  "detected_error": "Off-Center (%30 Kayma)",
+  "mint_error_type": "off-center",
+  "mint_error_confidence": 93,
+  "mint_error_description": "Ön yüz kalıbı sağ yukarıya doğru %30 oranında merkez dışına kaymıştır (Off-Center Strike).",
+  "estimated_value_multiplier": "2.0x - 3.5x"
 }
+Not: Eğer sikkede belirgin bir darp hatası (merkezleme kayması, ters brockage baskı, çift darp, kalıp çatlağı) yoksa has_mint_error: false ve detected_error: null olarak işaretle.
 PROMPT;
 
         try {
@@ -198,6 +217,12 @@ PROMPT;
             'catalog_references' => ['RIC II 142', 'RSC 26'],
             'historical_iconography' => 'Ön yüzde defne çelenkli Trajan büstü; arka yüzde ayakta duran Arabia personifikasyonu ve deve yavrusu.',
             'confidence_score' => 92,
+            'has_mint_error' => true,
+            'detected_error' => 'Off-Center (%30 Kayma)',
+            'mint_error_type' => 'off-center',
+            'mint_error_confidence' => 94,
+            'mint_error_description' => 'Ön yüz kalıbı sağ yukarıya doğru %30 oranında merkez dışına kaymıştır (Off-Center Strike).',
+            'estimated_value_multiplier' => '2.0x - 3.5x',
         ];
     }
 }

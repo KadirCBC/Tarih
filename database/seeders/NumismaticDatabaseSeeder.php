@@ -722,6 +722,11 @@ class NumismaticDatabaseSeeder extends Seeder
                 'is_expert_verification' => true,
             ],
         ]);
+
+        // ==================================================================
+        // 7. DARP HATALARI VE REHBER VERİLERİ (MINT ERROR TYPES)
+        // ==================================================================
+        $this->call(MintErrorTypeSeeder::class);
     }
 }
 

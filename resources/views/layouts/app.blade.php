@@ -109,6 +109,9 @@
                 <a href="{{ route('calculator.index') }}" class="hover:text-amber-400 transition flex items-center gap-1">
                     <span>⏳</span> Tarih Hesaplayıcı
                 </a>
+                <a href="{{ route('mint-errors.index') }}" class="hover:text-amber-400 transition flex items-center gap-1">
+                    <span>⚡</span> Darp Hataları
+                </a>
                 <a href="{{ route('identifications.index') }}" class="text-amber-300 hover:text-amber-400 font-semibold flex items-center gap-1 transition">
                     <span>🔍</span> Kulüp
                 </a>
@@ -220,6 +223,37 @@
         window.addEventListener('online', updateNetworkStatus);
         window.addEventListener('offline', updateNetworkStatus);
         updateNetworkStatus();
+
+        // Sağ Tık ve Görsel Kopyalama Koruması (Anti-Scraping & Telif Koruması)
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target && (e.target.tagName === 'IMG' || e.target.closest('.aspect-square') || e.target.closest('#ancient-map') || e.target.closest('#openseadragon-canvas'))) {
+                e.preventDefault();
+                showImageProtectionToast();
+                return false;
+            }
+        });
+
+        document.addEventListener('dragstart', function(e) {
+            if (e.target && e.target.tagName === 'IMG') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        function showImageProtectionToast() {
+            let toast = document.getElementById('image-protection-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'image-protection-toast';
+                toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900/95 border border-amber-500/50 text-amber-200 text-xs px-4 py-2.5 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2.5 font-medium transition duration-300 transform translate-y-4 opacity-0 pointer-events-none';
+                toast.innerHTML = '<span>🔒</span> <span>Bu nümizmatik arşiv görseli koruma altındadır. 2863 sayılı kanun uyarınca ticari amaçla kopyalanamaz.</span>';
+                document.body.appendChild(toast);
+            }
+            toast.classList.remove('translate-y-4', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-4', 'opacity-0');
+            }, 3000);
+        }
     </script>
 </body>
 </html>

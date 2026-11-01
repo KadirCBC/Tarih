@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             \App\Http\Middleware\SetLocaleMiddleware::class,
+            \App\Http\Middleware\AntiScrapeBotProtectionMiddleware::class,
         ]);
 
         $middleware->api(append: [
@@ -23,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'quota.scan' => \App\Http\Middleware\CheckScanQuota::class,
             'locale' => \App\Http\Middleware\SetLocaleMiddleware::class,
+            'antiscrape' => \App\Http\Middleware\AntiScrapeBotProtectionMiddleware::class,
+            'watermark' => \App\Http\Middleware\DynamicWatermarkMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
