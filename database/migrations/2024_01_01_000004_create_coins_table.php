@@ -39,11 +39,13 @@ return new class extends Migration
             $table->index(['ruler_id', 'denomination']);
             $table->index(['rarity_grade']);
 
-            // Fulltext Arama İndeksi: başlık, lejantlar ve katalog numarası
-            $table->fullText(
-                ['title', 'obverse_legend', 'reverse_legend', 'catalog_reference'],
-                'coins_fulltext_search'
-            );
+            // Fulltext Arama İndeksi: başlık, lejantlar ve katalog numarası (MySQL / MariaDB)
+            if (\Illuminate\Support\Facades\DB::getDriverName() !== 'sqlite') {
+                $table->fullText(
+                    ['title', 'obverse_legend', 'reverse_legend', 'catalog_reference'],
+                    'coins_fulltext_search'
+                );
+            }
         });
     }
 
