@@ -14,7 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Cache Decorator Pattern: CoinRepositoryInterface -> CachedCoinRepository(EloquentCoinRepository)
+        $this->app->singleton(\App\Repositories\Contracts\CoinRepositoryInterface::class, function ($app) {
+            return new \App\Repositories\CachedCoinRepository(
+                new \App\Repositories\EloquentCoinRepository(),
+                $app['cache.store']
+            );
+        });
     }
 
     /**
@@ -22,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Model Observers
+        \App\Models\Coin::observe(\App\Observers\CoinObserver::class);
+        \App\Models\UserCollection::observe(\App\Observers\UserCollectionObserver::class);
+
         // 1. Standart Web Kullanıcıları için Rate Limiting (Dakikada 60 istek)
         RateLimiter::for('web', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());

@@ -25,6 +25,13 @@ Route::get('/watermark/{path}', [\App\Http\Controllers\WatermarkedImageControlle
     ->where('path', '.*')
     ->name('image.watermark');
 
+// Günlük Sikke Yarışması ("Günün Sikkesi") & Oyunlaştırma
+Route::prefix('gunun-sikkesi')->name('quiz.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\QuizController::class, 'index'])->name('index');
+    Route::post('/cevapla', [\App\Http\Controllers\QuizController::class, 'answer'])->name('answer');
+    Route::get('/paylasim-karti.png', [\App\Http\Controllers\QuizController::class, 'shareCard'])->name('share-card');
+});
+
 // Dinamik Sitemap (spatie/laravel-sitemap)
 Route::get('/sitemap.xml', function (SitemapGeneratorService $service) {
     $path = public_path('sitemap.xml');
@@ -36,6 +43,10 @@ Route::get('/sitemap.xml', function (SitemapGeneratorService $service) {
 
 // Haftanın Sikkesi & Tarihsel Editoryal Hikayeler (Google Discover)
 Route::get('/haftanin-sikkesi', [StoryController::class, 'coinOfTheWeek'])->name('stories.week');
+Route::post('/bulten/abone-ol', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe')
+    ->middleware('throttle:5,1');
+
 Route::prefix('hikayeler')->name('stories.')->group(function () {
     Route::get('/', [StoryController::class, 'index'])->name('index');
     Route::get('/{story:slug}', [StoryController::class, 'show'])->name('show');

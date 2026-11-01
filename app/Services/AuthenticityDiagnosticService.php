@@ -9,12 +9,12 @@ class AuthenticityDiagnosticService
     /**
      * Kullanıcının girdiği ağırlık ve çap değerlerini sikkenin orijinal darp standartlarıyla karşılaştırır.
      *
-     * @param Coin $coin Katalog sikkesi
+     * @param Coin|object $coin Katalog sikkesi
      * @param float $measuredWeight Ölçülen ağırlık (gram)
      * @param float|null $measuredDiameter Ölçülen çap (milimetre)
      * @return array Teşhis ve sapma analizi
      */
-    public function analyzePhysicalDeviations(Coin $coin, float $measuredWeight, ?float $measuredDiameter = null): array
+    public function analyzePhysicalDeviations(object $coin, float $measuredWeight, ?float $measuredDiameter = null): array
     {
         $refWeight = (float) $coin->weight_g;
         $refDiameter = (float) $coin->diameter_mm;

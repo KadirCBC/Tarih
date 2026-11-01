@@ -119,4 +119,14 @@ Route::prefix('v1')->group(function () {
     // 10. Darp Hataları Rehberi (Mint Error Types)
     Route::get('/mint-errors', [\App\Http\Controllers\Api\MintErrorApiController::class, 'index']);
 
+    // 11. Günlük Sikke Yarışması & Oyunlaştırma (Gamification)
+    Route::prefix('quiz')->group(function () {
+        Route::get('/daily', [\App\Http\Controllers\Api\QuizApiController::class, 'daily']);
+        Route::post('/answer', [\App\Http\Controllers\Api\QuizApiController::class, 'answer']);
+    });
+
+    // 12. Otomatik Dağıtım Webhook (cPanel / Plesk Zero-Downtime Deploy)
+    Route::post('/system/deploy-webhook', [\App\Http\Controllers\Api\DeployWebhookController::class, 'handle'])
+        ->middleware('throttle:5,1');
+
 });

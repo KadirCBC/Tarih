@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=${DEPLOYPATH:-/home/$USER/laravel_app}
+    - /bin/echo "Deploying to: $DEPLOYPATH"
+    - /bin/cp -R * $DEPLOYPATH/
+    - /bin/chmod +x $DEPLOYPATH/deploy.sh
+    - /bin/bash $DEPLOYPATH/deploy.sh
+

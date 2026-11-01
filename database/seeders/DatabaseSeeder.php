@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             NumismaticDatabaseSeeder::class,
+            MintErrorTypeSeeder::class,
+            QuizQuestionSeeder::class,
         ]);
     }
 }

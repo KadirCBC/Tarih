@@ -10,9 +10,9 @@ class LegalContentFilterService
     protected array $prohibitedPatterns = [
         // Ticaret, Alım-Satım ve Pazarlık Kalıpları
         '/\b(sat[ıi]l[ıi]k|sat[ıi]yorum|satmak|sataca[gğ][ıi]m|sat[ıi]c[ıi]|sat[ıi][sş])\b/iu',
-        '/\b(fiyat[ıi]\s*ne\s*kadar\s*verirsin|ka[cç]a\s*gider|ka[cç]a\s*sat[ıi]l[ıi]r|ka[cç]a\s*al[ıi]rs[ıi]n)\b/iu',
+        '/\b(fiyat[ıi]?\s*ver|fiyat[ıi]?\s*ne\s*kadar(\s*verirsin)?|fiyat\s*bi[cç]|ka[cç]a\s*gider|ka[cç]a\s*sat[ıi]l[ıi]r|ka[cç]a\s*al[ıi]rs[ıi]n)\b/iu',
         '/\b(al[ıi]c[ıi]\s*aran[ıi]yor|teklif\s*ver|teklif\s*al[ıi]n[ıi]r|elden\s*sat[ıi][sş])\b/iu',
-        '/\b(ne\s*kadar\s*eder|de[gğ]eri\s*nedir\s*sataca[gğ][ıi]m)\b/iu',
+        '/\b(ne\s*kadar\s*eder|para\s*eder\s*mi|de[gğ]eri\s*nedir\s*sataca[gğ][ıi]m)\b/iu',
 
         // Definecilik, Kaçak Kazı ve Dedektör Kalıpları
         '/\b(define|defineci|definecilik|hazine|hazineci)\b/iu',

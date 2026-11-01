@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Git post-receive Hook (Plesk Git / Bare Repository)
+# Bu dosya sunucudaki .git/hooks/post-receive konumuna yerleştirilir.
+# ==============================================================================
+
+set -e
+
+# Çalışma ağacı (Target deploy directory)
+TARGET_DIR="/var/www/vhosts/example.com/httpdocs/laravel_app"
+# Veya Plesk standart yolu:
+# TARGET_DIR="/var/www/vhosts/$(whoami)/httpdocs"
+
+echo "=========================================="
+echo "⚡ Git post-receive kancası tetiklendi..."
+echo "=========================================="
+
+while read oldrev newrev refname
+do
+    BRANCH=$(git rev-parse --symbolic --abbrev-ref $refname)
+    if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+        echo "📦 $BRANCH dalı tespit edildi. $TARGET_DIR dizinine açılıyor..."
+        
+        # Git bare repo ise içeriği hedefe checkout et
+        git --work-tree="$TARGET_DIR" --git-dir="$(pwd)" checkout -f "$BRANCH"
+        
+        # Deploy betiğini çalıştır
+        if [ -f "$TARGET_DIR/deploy.sh" ]; then
+            chmod +x "$TARGET_DIR/deploy.sh"
+            bash "$TARGET_DIR/deploy.sh"
+        else
+            echo "⚠️ $TARGET_DIR/deploy.sh bulunamadı!"
+        fi
+    else
+        echo "ℹ️ $BRANCH dalı deploy edilmeyecek (Yalnızca main/master)."
+    fi
+done
+
+echo "🎉 post-receive işlemi tamamlandı!"
+

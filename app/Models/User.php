@@ -28,6 +28,7 @@ class User extends Authenticatable
         'subscription_id',
         'is_expert',
         'expert_title',
+        'numismatic_points',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'subscription_expires_at' => 'datetime',
             'is_expert' => 'boolean',
+            'numismatic_points' => 'integer',
         ];
     }
 
@@ -136,5 +138,52 @@ class User extends Authenticatable
         return $this->belongsToMany(Coin::class, 'user_collections')
             ->withPivot('user_condition', 'purchase_date', 'notes')
             ->withTimestamps();
+    }
+
+    /**
+     * Kullanıcının kazandığı başarı rozetleri.
+     */
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
+    /**
+     * Kullanıcının günlük seri ve puan kaydı.
+     */
+    public function streak(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserStreak::class)->withDefault([
+            'current_streak_days' => 0,
+            'longest_streak_days' => 0,
+            'total_points' => 0,
+        ]);
+    }
+
+    /**
+     * Kullanıcıya nümizmatik puanı ekler.
+     */
+    public function addNumismaticPoints(int $points): void
+    {
+        $this->increment('numismatic_points', $points);
+        $streak = $this->streak()->firstOrCreate(['user_id' => $this->id]);
+        $streak->increment('total_points', $points);
+    }
+
+    /**
+     * Kullanıcıya rozet kazandırır (varsa tekrar eklemez).
+     */
+    public function awardBadge(string $badgeType): bool
+    {
+        if ($this->achievements()->where('badge_type', $badgeType)->exists()) {
+            return false;
+        }
+
+        $this->achievements()->create([
+            'badge_type' => $badgeType,
+            'unlocked_at' => now(),
+        ]);
+
+        return true;
     }
 }

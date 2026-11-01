@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/search/coin_search_screen.dart';
 import 'screens/scanner/coin_scanner_screen.dart';
+import 'screens/quiz/daily_quiz_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const CoinSearchScreen(),
     const CoinScannerScreen(),
+    const DailyQuizScreen(),
     const Center(
       child: Text(
         'Kişisel Koleksiyon Defteri (Sanctum Sync)',
@@ -83,6 +85,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             icon: Icon(Icons.camera_alt_outlined, color: Colors.grey),
             selectedIcon: Icon(Icons.camera_alt, color: Colors.amber),
             label: 'Tara',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.quiz_outlined, color: Colors.grey),
+            selectedIcon: Icon(Icons.quiz, color: Colors.amber),
+            label: 'Yarışma',
           ),
           NavigationDestination(
             icon: Icon(Icons.bookmark_border, color: Colors.grey),

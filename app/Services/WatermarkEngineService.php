@@ -44,7 +44,9 @@ class WatermarkEngineService
             // GD ile açılamazsa orijinal dosyayı doğrudan dön
             return response(file_get_contents($fullPath), 200, [
                 'Content-Type' => $mime,
-                'Cache-Control' => 'public, max-age=86400',
+                'Cache-Control' => 'public, max-age=31536000, immutable',
+                'Cloudflare-CDN-Cache-Control' => 'max-age=31536000',
+                'CDN-Cache-Control' => 'max-age=31536000',
             ]);
         }
 
@@ -113,7 +115,9 @@ class WatermarkEngineService
 
         return response($imageData, 200, [
             'Content-Type' => $outputMime,
-            'Cache-Control' => 'public, max-age=86400, stale-while-revalidate=604800',
+            'Cache-Control' => 'public, max-age=31536000, immutable',
+            'Cloudflare-CDN-Cache-Control' => 'max-age=31536000',
+            'CDN-Cache-Control' => 'max-age=31536000',
             'X-Watermark-Applied' => 'dynamic-academic-v1',
             'X-Content-Type-Options' => 'nosniff',
         ]);

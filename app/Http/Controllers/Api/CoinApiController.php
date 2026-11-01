@@ -88,21 +88,11 @@ class CoinApiController extends Controller
     }
 
     /**
-     * Sikke detay uç noktası (İlişkili görseller, hükümdar, darphane, çapraz referanslar ve varyantlarla).
+     * Sikke detay uç noktası (24 Saatlik Çok Katmanlı Önbellek ve Repository Destekli).
      */
-    public function show(string $slug): JsonResponse
+    public function show(string $slug, \App\Repositories\Contracts\CoinRepositoryInterface $coinRepo): JsonResponse
     {
-        $coin = Coin::where('slug', $slug)
-            ->with([
-                'period',
-                'ruler',
-                'mint',
-                'images',
-                'references',
-                'variants',
-                'valuations' => fn ($q) => $q->orderBy('min_value_usd', 'asc'),
-            ])
-            ->first();
+        $coin = $coinRepo->findPublishedBySlug($slug);
 
         if (!$coin) {
             return $this->error('Talep edilen nümizmatik sikke kaydı bulunamadı.', 404);
