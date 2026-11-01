@@ -1,0 +1,114 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # ----------------------------------------------------------------------
+    # 1. GİZLİ VE KRİTİK DOSYALARI KORUMA (.env, .git, artisan, vb.)
+    # ----------------------------------------------------------------------
+    # Nokta ile başlayan tüm gizli dosya ve dizinleri engelle (.env, .git, .user.ini vb.)
+    RewriteRule (^\.|/\.) - [F,L]
+
+    # Kritik kök dizin dosyalarına erişimi doğrudan yasakla
+    RewriteRule ^(artisan|composer\.(json|lock)|package\.(json|lock)|phpunit\.xml|README\.md|\.editorconfig) - [F,L,NC]
+
+    # Yetkilendirme Başlığı (Authorization Header)
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Sondaki eğik çizgiyi kaldır (Trailing Slash)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Ön Yüz Denetleyicisi (Front Controller) - Var olan dosya veya dizin değilse index.php'ye yönlendir
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 2. APACHE 2.4 DÜZEYİNDE DOSYA ERİŞİM ENGELİ (Ek Güvenlik Katmanı)
+# ----------------------------------------------------------------------
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "^(artisan|composer\.(json|lock)|package\.(json|lock)|\.env.*|\.user\.ini|php\.ini)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ----------------------------------------------------------------------
+# 3. GÜVENLİK BAŞLIKLARI (SECURITY HEADERS)
+# ----------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Clickjacking saldırılarına karşı koruma
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # MIME-type sniffing saldırılarına karşı koruma
+    Header set X-Content-Type-Options "nosniff"
+
+    # XSS Filtresi (Eski tarayıcılar için)
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Referrer Gizliliği
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Hassas tarayıcı özelliklerini sınırla
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+    # Server imzasını gizle (mod_headers destekliyorsa)
+    Header unset X-Powered-By
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 4. STATİK DOSYALAR İÇİN ÖNBELLEKLEME (Sikke Fotoğrafları & Varlıklar)
+# ----------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    # CSS & JavaScript
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+
+    # Sikke Fotoğrafları ve Grafikler
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 5. GZIP / DEFLATE SIKIŞTIRMA (Bant Genişliği & Hız Optimizasyonu)
+# ----------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
