@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CoinDetailResource;
 use App\Http\Resources\CoinResource;
 use App\Models\Coin;
+use App\Services\ConcordanceResolverService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,19 +18,31 @@ class CoinApiController extends Controller
     use ApiResponse;
 
     /**
-     * Sikke kataloğu listeleme, çoklu filtreleme ve lejant arama.
+     * Sikke kataloğu listeleme, çoklu filtreleme ve lejant/concordance arama.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, ConcordanceResolverService $resolver): JsonResponse
     {
+        $concordanceMatch = null;
+
         $query = Coin::query()->with([
             'period:id,name,slug,start_year,end_year',
             'ruler:id,name,slug',
             'mint:id,name,slug,location',
             'primaryImage',
+            'references',
         ]);
 
-        // Lejant / Serbest metin araması (Fulltext & Kısaltmalar örn: AVG, TRAIAN)
+        // Lejant / Serbest metin veya Concordance araması (RIC 142, Sear 1850 vb.)
         if ($search = $request->input('q')) {
+            $resolution = $resolver->resolve($search);
+            if ($resolution['system']) {
+                $concordanceMatch = [
+                    'system' => $resolution['system'],
+                    'reference' => $resolution['reference'],
+                    'is_direct_match' => $resolution['is_direct_match'],
+                    'direct_coin_slug' => $resolution['coin']?->slug,
+                ];
+            }
             $query->search($search);
         }
 
@@ -62,6 +75,7 @@ class CoinApiController extends Controller
         $paginated = $query->latest('id')->paginate($perPage);
 
         return $this->success([
+            'concordance_resolved' => $concordanceMatch,
             'items' => CoinResource::collection($paginated->items()),
             'pagination' => [
                 'current_page' => $paginated->currentPage(),
@@ -74,7 +88,7 @@ class CoinApiController extends Controller
     }
 
     /**
-     * Sikke detay uç noktası (İlişkili görseller, hükümdar, darphane ve değerleme tablosuyla).
+     * Sikke detay uç noktası (İlişkili görseller, hükümdar, darphane, çapraz referanslar ve varyantlarla).
      */
     public function show(string $slug): JsonResponse
     {
@@ -84,6 +98,8 @@ class CoinApiController extends Controller
                 'ruler',
                 'mint',
                 'images',
+                'references',
+                'variants',
                 'valuations' => fn ($q) => $q->orderBy('min_value_usd', 'asc'),
             ])
             ->first();
@@ -95,6 +111,32 @@ class CoinApiController extends Controller
         $coin->incrementViews();
 
         return $this->success(new CoinDetailResource($coin));
+    }
+
+    /**
+     * Sikke Fiziksel Sapma ve Sahtelik Doğrulama Algoritması
+     * Kullanıcının girdiği ağırlık ve çapı orijinal standartlarla karşılaştırıp sahtelik teşhisi üretir.
+     */
+    public function verifyPhysical(Request $request, string $slug, \App\Services\AuthenticityDiagnosticService $diagnosticService): JsonResponse
+    {
+        $coin = Coin::where('slug', $slug)->first();
+
+        if (!$coin) {
+            return $this->error('Sikke kaydı bulunamadı.', 404);
+        }
+
+        $validated = $request->validate([
+            'weight_g' => ['required', 'numeric', 'min:0.1', 'max:500'],
+            'diameter_mm' => ['nullable', 'numeric', 'min:1', 'max:150'],
+        ]);
+
+        $diagnosis = $diagnosticService->analyzePhysicalDeviations(
+            coin: $coin,
+            measuredWeight: (float) $validated['weight_g'],
+            measuredDiameter: isset($validated['diameter_mm']) ? (float) $validated['diameter_mm'] : null
+        );
+
+        return $this->success($diagnosis, $diagnosis['title']);
     }
 
     /**

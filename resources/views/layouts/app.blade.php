@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>@yield('title', 'Antik Sikke Ansiklopedisi ve Nümizmatik Referans Kataloğu')</title>
     <meta name="description" content="@yield('meta_description', 'Akademik antik sikke kataloğu, lejant çözümlemeleri, nadirlik dereceleri ve uluslararası müzayede referans değerleri.')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
@@ -13,6 +14,13 @@
     <meta property="og:description" content="@yield('meta_description', 'Antik nümizmatik bilgi ve referans kataloğu.')">
     <meta property="og:url" content="{{ url()->current() }}">
     @yield('og_image')
+
+    <!-- PWA & Mobile Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#d97706">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nümizmatik">
 
     <!-- Google Fonts: Inter & Cinzel for Ancient Inscriptions -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,8 +103,48 @@
 
             <nav class="flex items-center gap-4 text-sm font-medium text-slate-300">
                 <a href="{{ route('coins.index') }}" class="hover:text-amber-400 transition">Katalog</a>
+                <a href="{{ route('map.index') }}" class="text-amber-300 hover:text-amber-400 font-semibold flex items-center gap-1 transition">
+                    <span>🗺️</span> Harita
+                </a>
+                <a href="{{ route('calculator.index') }}" class="hover:text-amber-400 transition flex items-center gap-1">
+                    <span>⏳</span> Tarih Hesaplayıcı
+                </a>
+                <a href="{{ route('identifications.index') }}" class="text-amber-300 hover:text-amber-400 font-semibold flex items-center gap-1 transition">
+                    <span>🔍</span> Kulüp
+                </a>
+                <a href="{{ route('epigraphy.index') }}" class="hover:text-amber-400 transition">Lejant Çözücü</a>
+                <a href="{{ route('stories.week') }}" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 transition">
+                    <span>⭐</span> Haftanın Sikkesi
+                </a>
                 <a href="{{ route('periods.index') }}" class="hover:text-amber-400 transition">Dönemler</a>
                 <a href="{{ route('rulers.index') }}" class="hover:text-amber-400 transition">Hükümdarlar</a>
+                <a href="{{ route('collection.index') }}" class="text-slate-300 hover:text-amber-400 transition">Koleksiyonum</a>
+
+                <!-- Çok Dilli Seçici (i18n: TR, EN, DE) -->
+                <div class="relative group">
+                    <button class="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">
+                        <span>{{ strtoupper(app()->getLocale()) }}</span>
+                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute right-0 mt-1 w-28 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
+                        <a href="{{ route('locale.switch', 'tr') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ app()->getLocale() === 'tr' ? 'text-amber-400 font-bold' : '' }}">🇹🇷 Türkçe</a>
+                        <a href="{{ route('locale.switch', 'en') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ app()->getLocale() === 'en' ? 'text-amber-400 font-bold' : '' }}">🇬🇧 English</a>
+                        <a href="{{ route('locale.switch', 'de') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ app()->getLocale() === 'de' ? 'text-amber-400 font-bold' : '' }}">🇩🇪 Deutsch</a>
+                    </div>
+                </div>
+
+                <!-- Otomatik Para Birimi Seçici (USD, EUR, TRY) -->
+                <div class="relative group">
+                    <button class="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        <span>{{ session('user_currency', 'USD') }}</span>
+                        <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute right-0 mt-1 w-28 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
+                        <a href="{{ route('currency.switch', 'USD') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ session('user_currency', 'USD') === 'USD' ? 'text-amber-400 font-bold' : '' }}">$ USD</a>
+                        <a href="{{ route('currency.switch', 'EUR') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ session('user_currency') === 'EUR' ? 'text-amber-400 font-bold' : '' }}">€ EUR</a>
+                        <a href="{{ route('currency.switch', 'TRY') }}" class="block px-3 py-1.5 text-xs hover:bg-slate-700 text-slate-200 {{ session('user_currency') === 'TRY' ? 'text-amber-400 font-bold' : '' }}">₺ TRY</a>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -137,6 +185,42 @@
         </div>
     </footer>
 
+    <!-- Otomatik Hukuki Aydınlatma ve Onay Modalı -->
+    @include('components.legal-modal')
+
+    <!-- Çevrimdışı / Çevrimiçi Ağ Durum Bildirimi -->
+    <div id="pwa-offline-pill" class="fixed bottom-4 left-4 z-50 bg-amber-950/90 text-amber-200 border border-amber-500/40 text-xs px-3.5 py-1.5 rounded-full shadow-2xl backdrop-blur-md hidden items-center gap-2 font-mono">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span>Çevrimdışı Mod (Yerel Önbellek)</span>
+    </div>
+
+    <!-- PWA Service Worker Kaydı -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((reg) => console.log('PWA Service Worker aktif:', reg.scope))
+                    .catch((err) => console.warn('PWA Service Worker kaydı başarısız:', err));
+            });
+        }
+
+        // Çevrimdışı durum kontrolü
+        function updateNetworkStatus() {
+            const pill = document.getElementById('pwa-offline-pill');
+            if (pill) {
+                if (!navigator.onLine) {
+                    pill.classList.remove('hidden');
+                    pill.classList.add('flex');
+                } else {
+                    pill.classList.remove('flex');
+                    pill.classList.add('hidden');
+                }
+            }
+        }
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+        updateNetworkStatus();
+    </script>
 </body>
 </html>
 

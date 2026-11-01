@@ -24,6 +24,10 @@ class Mint extends Model
         'location',
         'latitude',
         'longitude',
+        'ancient_name',
+        'modern_name',
+        'active_period',
+        'historical_significance',
     ];
 
     /**

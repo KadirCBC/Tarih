@@ -22,6 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'subscription_tier',
+        'subscription_expires_at',
+        'subscription_provider',
+        'subscription_id',
+        'is_expert',
+        'expert_title',
     ];
 
     /**
@@ -44,7 +50,74 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'subscription_expires_at' => 'datetime',
+            'is_expert' => 'boolean',
         ];
+    }
+
+    /**
+     * Kullanıcının Doğrulanmış Nümizmat / Editör olup olmadığını kontrol eder.
+     */
+    public function isExpert(): bool
+    {
+        return (bool) $this->is_expert;
+    }
+
+    /**
+     * Kullanıcının kimlikleme talepleri.
+     */
+    public function identificationRequests(): HasMany
+    {
+        return $this->hasMany(IdentificationRequest::class);
+    }
+
+    /**
+     * Kullanıcının yaptığı topluluk önerileri.
+     */
+    public function identificationComments(): HasMany
+    {
+        return $this->hasMany(IdentificationComment::class);
+    }
+
+    /**
+     * Kullanıcının Nümizmat Pro üyesi olup olmadığını kontrol eder.
+     */
+    public function isPro(): bool
+    {
+        if ($this->subscription_tier !== 'pro') {
+            return false;
+        }
+
+        // Süresiz pro veya süresi dolmamış aktif abonelik
+        return is_null($this->subscription_expires_at) || $this->subscription_expires_at->isFuture();
+    }
+
+    /**
+     * Günlük maksimum AI sikke tanıma hakkı (Pro: Sınırsız, Free: 3).
+     */
+    public function getDailyScanLimit(): int
+    {
+        return $this->isPro() ? 999999 : 3;
+    }
+
+    /**
+     * Şahsi envantere eklenebilecek maksimum sikke adedi (Pro: Sınırsız, Free: 5).
+     */
+    public function getMaxCollectionLimit(): int
+    {
+        return $this->isPro() ? 999999 : 5;
+    }
+
+    /**
+     * Kullanıcının envanter kotasını doldurup doldurmadığını denetler.
+     */
+    public function canAddToCollection(): bool
+    {
+        if ($this->isPro()) {
+            return true;
+        }
+
+        return $this->collections()->count() < $this->getMaxCollectionLimit();
     }
 
     /**
@@ -65,4 +138,3 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 }
-

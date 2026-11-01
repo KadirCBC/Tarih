@@ -53,12 +53,19 @@ class CoinService {
       'top_k': 3,
     });
 
-    final response = await _dio.post('/coins/identify', data: formData);
+    try {
+      final response = await _dio.post('/coins/identify', data: formData);
 
-    if (response.data['success'] == true) {
-      return response.data['data'];
+      if (response.data['success'] == true) {
+        return response.data['data'];
+      }
+      throw Exception(response.data['message'] ?? 'Eşleştirme yapılamadı.');
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 429) {
+        throw Exception(e.response?.data['message'] ?? 'Günlük 3 ücretsiz sikke tarama limitiniz doldu.');
+      }
+      throw Exception(e.response?.data['message'] ?? 'Sunucu bağlantı hatası.');
     }
-    throw Exception(response.data['message'] ?? 'Eşleştirme yapılamadı.');
   }
 
   /// Dönem listesini çekme
@@ -69,6 +76,22 @@ class CoinService {
       return items.map((json) => Period.fromJson(json)).toList();
     }
     return [];
+  }
+
+  /// Sikke Fiziksel Sapma ve Sahtelik Doğrulama Algoritması
+  Future<Map<String, dynamic>> verifyPhysical({
+    required String slug,
+    required double weightG,
+    double? diameterMm,
+  }) async {
+    final response = await _dio.post('/coins/$slug/verify-physical', data: {
+      'weight_g': weightG,
+      if (diameterMm != null) 'diameter_mm': diameterMm,
+    });
+    if (response.data['success'] == true) {
+      return response.data['data'];
+    }
+    throw Exception(response.data['message'] ?? 'Doğrulama yapılamadı.');
   }
 }
 

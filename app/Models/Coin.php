@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\CoinMetal;
 use App\Enums\RarityGrade;
+use App\Traits\HasMultilingualFields;
 use App\Traits\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Coin extends Model
 {
-    use HasFactory, HasUniqueSlug;
+    use HasFactory, HasUniqueSlug, HasMultilingualFields;
 
     protected $table = 'coins';
 
@@ -29,6 +30,7 @@ class Coin extends Model
         'ruler_id',
         'mint_id',
         'title',
+        'title_translations',
         'slug',
         'catalog_reference',
         'denomination',
@@ -36,13 +38,18 @@ class Coin extends Model
         'weight_g',
         'diameter_mm',
         'obverse_desc',
+        'obverse_desc_translations',
         'obverse_legend',
         'obverse_legend_trans',
+        'obverse_legend_trans_translations',
         'reverse_desc',
+        'reverse_desc_translations',
         'reverse_legend',
         'reverse_legend_trans',
+        'reverse_legend_trans_translations',
         'rarity_grade',
         'historical_notes',
+        'historical_notes_translations',
         'view_count',
     ];
 
@@ -67,6 +74,12 @@ class Coin extends Model
             'weight_g' => 'decimal:2',
             'diameter_mm' => 'decimal:1',
             'view_count' => 'integer',
+            'title_translations' => 'array',
+            'obverse_desc_translations' => 'array',
+            'obverse_legend_trans_translations' => 'array',
+            'reverse_desc_translations' => 'array',
+            'reverse_legend_trans_translations' => 'array',
+            'historical_notes_translations' => 'array',
         ];
     }
 
@@ -137,6 +150,30 @@ class Coin extends Model
     }
 
     /**
+     * Sikkeye ait çapraz katalog referansları (Concordance: RIC, BMC, Sear, Cohen, Crawford, RSC vb.).
+     */
+    public function references(): HasMany
+    {
+        return $this->hasMany(CoinReference::class);
+    }
+
+    /**
+     * Sikkeye ait tipolojik varyasyonlar (lejant kırılması, darphane monogramı farkları).
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(CoinVariant::class);
+    }
+
+    /**
+     * Uluslararası açık artırma evlerinin gerçekleşen satış kayıtları.
+     */
+    public function auctionRecords(): HasMany
+    {
+        return $this->hasMany(AuctionRecord::class);
+    }
+
+    /**
      * MySQL Fulltext ve kısaltma/akademik lejant uyumlu arama motoru.
      * "AVG", "IMP", "TRAIAN" gibi 3 harfli lejant ve katalog kısaltmalarını da eksiksiz yakalar.
      */
@@ -168,7 +205,14 @@ class Coin extends Model
                 ->orWhere('obverse_legend', 'like', "%{$term}%")
                 ->orWhere('reverse_legend', 'like', "%{$term}%")
                 ->orWhere('catalog_reference', 'like', "%{$term}%")
-                ->orWhere('denomination', 'like', "%{$term}%");
+                ->orWhere('denomination', 'like', "%{$term}%")
+                ->orWhereHas('references', function (Builder $refQuery) use ($term) {
+                    $refQuery->where('reference_number', 'like', "%{$term}%")
+                             ->orWhereRaw("CONCAT(catalog_system, ' ', reference_number) LIKE ?", ["%{$term}%"]);
+                })
+                ->orWhereHas('variants', function (Builder $varQuery) use ($term) {
+                    $varQuery->where('variant_code', 'like', "%{$term}%");
+                });
         });
     }
 

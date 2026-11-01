@@ -44,21 +44,73 @@ class Ruler {
   }
 }
 
+class MintInfo {
+  final int id;
+  final String name;
+  final String slug;
+  final String? location;
+  final String? ancientName;
+  final String? modernName;
+  final String? activePeriod;
+  final String? historicalSignificance;
+  final double? latitude;
+  final double? longitude;
+  final bool hasCoordinates;
+
+  MintInfo({
+    required this.id,
+    required this.name,
+    required this.slug,
+    this.location,
+    this.ancientName,
+    this.modernName,
+    this.activePeriod,
+    this.historicalSignificance,
+    this.latitude,
+    this.longitude,
+    required this.hasCoordinates,
+  });
+
+  factory MintInfo.fromJson(Map<String, dynamic> json) {
+    final lat = json['latitude'] != null ? (json['latitude'] as num).toDouble() : null;
+    final lng = json['longitude'] != null ? (json['longitude'] as num).toDouble() : null;
+    return MintInfo(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      slug: json['slug'] ?? '',
+      location: json['location'],
+      ancientName: json['ancient_name'],
+      modernName: json['modern_name'],
+      activePeriod: json['active_period'],
+      historicalSignificance: json['historical_significance'],
+      latitude: lat,
+      longitude: lng,
+      hasCoordinates: json['has_coordinates'] ?? (lat != null && lng != null),
+    );
+  }
+}
+
 class Valuation {
   final int id;
   final String conditionGrade;
   final String? conditionLabel;
-  final double minValueUsd;
-  final double maxValueUsd;
+  final String currency;
+  final String currencySymbol;
+  final double minValue;
+  final double maxValue;
   final String priceRangeFormatted;
+  final bool isLocked;
 
   Valuation({
     required this.id,
     required this.conditionGrade,
     this.conditionLabel,
-    required this.minValueUsd,
-    required this.maxValueUsd,
+    this.currency = 'USD',
+    this.currencySymbol = '\$',
+    required this.minValue,
+    required this.maxValue,
     required this.priceRangeFormatted,
+    this.isLocked = false,
   });
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
@@ -66,9 +118,12 @@ class Valuation {
       id: json['id'] ?? 0,
       conditionGrade: json['condition_grade'] ?? 'VF',
       conditionLabel: json['condition_label'],
-      minValueUsd: (json['min_value_usd'] ?? 0).toDouble(),
-      maxValueUsd: (json['max_value_usd'] ?? 0).toDouble(),
+      currency: json['currency'] ?? 'USD',
+      currencySymbol: json['currency_symbol'] ?? '\$',
+      minValue: (json['min_value'] ?? json['min_value_usd'] ?? 0).toDouble(),
+      maxValue: (json['max_value'] ?? json['max_value_usd'] ?? 0).toDouble(),
       priceRangeFormatted: json['price_range_formatted'] ?? '',
+      isLocked: json['is_locked'] ?? false,
     );
   }
 }
@@ -109,6 +164,7 @@ class Coin {
   final String rarityGrade;
   final Period? period;
   final Ruler? ruler;
+  final MintInfo? mint;
   final String? primaryImageUrl;
 
   Coin({
@@ -124,6 +180,7 @@ class Coin {
     required this.rarityGrade,
     this.period,
     this.ruler,
+    this.mint,
     this.primaryImageUrl,
   });
 
@@ -141,6 +198,7 @@ class Coin {
       rarityGrade: json['rarity_grade'] ?? 'C',
       period: json['period'] != null ? Period.fromJson(json['period']) : null,
       ruler: json['ruler'] != null ? Ruler.fromJson(json['ruler']) : null,
+      mint: json['mint'] != null ? MintInfo.fromJson(json['mint']) : null,
       primaryImageUrl: json['primary_image']?['image_url'],
     );
   }
@@ -170,6 +228,7 @@ class CoinDetail extends Coin {
     required super.rarityGrade,
     super.period,
     super.ruler,
+    super.mint,
     super.primaryImageUrl,
     this.obverseDesc,
     this.obverseLegend,
@@ -199,6 +258,7 @@ class CoinDetail extends Coin {
       rarityGrade: json['rarity_grade'] ?? 'C',
       period: json['period'] != null ? Period.fromJson(json['period']) : null,
       ruler: json['ruler'] != null ? Ruler.fromJson(json['ruler']) : null,
+      mint: json['mint'] != null ? MintInfo.fromJson(json['mint']) : null,
       primaryImageUrl: json['primary_image']?['image_url'],
       obverseDesc: obverse['desc'],
       obverseLegend: obverse['legend'],

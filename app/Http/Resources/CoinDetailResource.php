@@ -16,7 +16,7 @@ class CoinDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'title' => $this->translated_title,
             'slug' => $this->slug,
             'catalog_reference' => $this->catalog_reference,
             'denomination' => $this->denomination,
@@ -28,21 +28,30 @@ class CoinDetailResource extends JsonResource
             'rarity_label' => $this->rarity_grade?->label() ?? null,
             'view_count' => (int) $this->view_count,
 
-            // Ön Yüz (Obverse) Epigrafisi ve Tasviri
+            // Ön Yüz (Obverse) Epigrafisi ve Tasviri (Orijinal lejant + Çevirisi)
             'obverse' => [
-                'desc' => $this->obverse_desc,
-                'legend' => $this->obverse_legend,
-                'legend_translation' => $this->obverse_legend_trans,
+                'desc' => $this->translated_obverse_desc,
+                'legend' => $this->obverse_legend, // Epigrafik Orijinal (Latince/Grekçe)
+                'legend_translation' => $this->translated_obverse_legend_trans,
             ],
 
-            // Arka Yüz (Reverse) Epigrafisi ve Tasviri
+            // Arka Yüz (Reverse) Epigrafisi ve Tasviri (Orijinal lejant + Çevirisi)
             'reverse' => [
-                'desc' => $this->reverse_desc,
-                'legend' => $this->reverse_legend,
-                'legend_translation' => $this->reverse_legend_trans,
+                'desc' => $this->translated_reverse_desc,
+                'legend' => $this->reverse_legend, // Epigrafik Orijinal (Latince/Grekçe)
+                'legend_translation' => $this->translated_reverse_legend_trans,
             ],
 
-            'historical_notes' => $this->historical_notes,
+            'historical_notes' => $this->translated_historical_notes,
+
+            // Çok dilli meta veriler (tr, en, de)
+            'translations' => [
+                'title' => $this->getTranslations('title'),
+                'obverse_legend_trans' => $this->getTranslations('obverse_legend_trans'),
+                'reverse_legend_trans' => $this->getTranslations('reverse_legend_trans'),
+                'historical_notes' => $this->getTranslations('historical_notes'),
+            ],
+
             'legal_notice' => 'Bu veri 2863 sayılı kanun kapsamında akademik/eğitim amaçlı nümizmatik arşiv kaydıdır. Alım-satım yapılmaz.',
 
             // İlişkiler
@@ -52,10 +61,12 @@ class CoinDetailResource extends JsonResource
             'images' => CoinImageResource::collection($this->whenLoaded('images')),
             'primary_image' => new CoinImageResource($this->whenLoaded('primaryImage')),
             'valuations' => ValuationResource::collection($this->whenLoaded('valuations')),
+            'concordance_references' => CoinReferenceResource::collection($this->whenLoaded('references')),
+            'variants' => CoinVariantResource::collection($this->whenLoaded('variants')),
+            'recent_auction_records' => AuctionRecordResource::collection($this->whenLoaded('auctionRecords')),
 
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }
-

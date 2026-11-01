@@ -16,7 +16,7 @@ class CoinResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'title' => $this->translated_title,
             'slug' => $this->slug,
             'catalog_reference' => $this->catalog_reference,
             'denomination' => $this->denomination,
@@ -35,4 +35,3 @@ class CoinResource extends JsonResource
         ];
     }
 }
-

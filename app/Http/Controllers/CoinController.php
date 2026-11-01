@@ -9,6 +9,7 @@ use App\Models\Coin;
 use App\Models\Mint;
 use App\Models\Period;
 use App\Models\Ruler;
+use App\Services\ConcordanceResolverService;
 use Illuminate\Http\Request;
 
 class CoinController extends Controller
@@ -78,14 +79,22 @@ class CoinController extends Controller
     }
 
     /**
-     * Hızlı nümizmatik arama motoru (Lejant, İmparator, RIC ve Katalog no).
+     * Hızlı nümizmatik arama motoru ve Concordance Akıllı Yönlendirici (Smart Resolver).
      */
-    public function search(Request $request)
+    public function search(Request $request, ConcordanceResolverService $resolver)
     {
         $term = trim((string) $request->input('q', ''));
 
         if (empty($term)) {
             return redirect()->route('coins.index');
+        }
+
+        // 1. Akıllı Katalog Çözümleyici (Concordance Resolver)
+        // Kullanıcı "RIC 142", "Sear 1850" veya "Crawford 335/1c" yazdığında doğrudan ilgili sikkeye yönlendirir
+        $resolution = $resolver->resolve($term);
+        if ($resolution['is_direct_match'] && $resolution['coin']) {
+            return redirect()->route('coins.show', $resolution['coin']->slug)
+                ->with('concordance_info', "{$resolution['system']} {$resolution['reference']} referansı doğrudan eşleştirildi.");
         }
 
         $coins = Coin::search($term)
@@ -95,6 +104,7 @@ class CoinController extends Controller
                 'mint:id,name,slug',
                 'primaryImage',
                 'valuations',
+                'references',
             ])
             ->paginate(24)
             ->withQueryString();
@@ -113,11 +123,12 @@ class CoinController extends Controller
             'metals' => $metals,
             'rarities' => $rarities,
             'searchTerm' => $term,
+            'resolvedConcordance' => $resolution['system'] ? $resolution : null,
         ]);
     }
 
     /**
-     * Sikke detay sayfası (Akademik bilgiler, lejant çözümlemeleri, piyasa bantları).
+     * Sikke detay sayfası (Akademik bilgiler, lejant çözümlemeleri, piyasa bantları, çapraz referanslar).
      */
     public function show(Coin $coin)
     {
@@ -128,6 +139,9 @@ class CoinController extends Controller
             'ruler',
             'mint',
             'images',
+            'references',
+            'variants',
+            'auctionRecords' => fn ($q) => $q->latest('sale_date')->take(10),
             'valuations' => fn ($q) => $q->orderBy('min_value_usd', 'asc'),
         ]);
 
