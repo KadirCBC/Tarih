@@ -13,11 +13,11 @@
     <!-- JSON-LD Dinamik Schema Markup (VisualArtifact & BreadcrumbList) -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@graph": [
+        "@@context": "https://schema.org",
+        "@@graph": [
             {
-                "@type": "VisualArtifact",
-                "@id": "{{ url()->current() }}#artifact",
+                "@@type": "VisualArtifact",
+                "@@id": "{{ url()->current() }}#artifact",
                 "name": "{{ $coin->title }}",
                 "headline": "{{ $coin->title }}",
                 "description": "{{ addslashes(Str::limit(strip_tags($coin->historical_notes ?? $coin->obverse_desc), 250)) }}",
@@ -31,34 +31,34 @@
                 @endif
                 "temporalCoverage": "{{ $coin->period?->formatted_date_range }}",
                 "creator": {
-                    "@type": "Person",
+                    "@@type": "Person",
                     "name": "{{ $coin->ruler?->name ?? 'Bilinmeyen Darbedici' }}"
                 },
                 "locationCreated": {
-                    "@type": "Place",
+                    "@@type": "Place",
                     "name": "{{ $coin->mint?->name ?? 'Antik Darphane' }}"
                 },
                 "identifier": "{{ $coin->catalog_reference }}",
                 "inLanguage": "tr"
             },
             {
-                "@type": "BreadcrumbList",
-                "@id": "{{ url()->current() }}#breadcrumb",
+                "@@type": "BreadcrumbList",
+                "@@id": "{{ url()->current() }}#breadcrumb",
                 "itemListElement": [
                     {
-                        "@type": "ListItem",
+                        "@@type": "ListItem",
                         "position": 1,
                         "name": "Katalog",
                         "item": "{{ route('coins.index') }}"
                     },
                     {
-                        "@type": "ListItem",
+                        "@@type": "ListItem",
                         "position": 2,
                         "name": "{{ $coin->period?->name ?? 'Dönem' }}",
                         "item": "{{ $coin->period ? route('periods.show', $coin->period->slug) : '#' }}"
                     },
                     {
-                        "@type": "ListItem",
+                        "@@type": "ListItem",
                         "position": 3,
                         "name": "{{ $coin->title }}"
                     }

@@ -16,11 +16,11 @@
 <!-- Google Discover & NewsArticle Schema Markup -->
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
+    "@@context": "https://schema.org",
+    "@@type": "Article",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "{{ route('stories.show', $story->slug) }}"
+        "@@type": "WebPage",
+        "@@id": "{{ route('stories.show', $story->slug) }}"
     },
     "headline": "{{ $story->title }}",
     "description": "{{ addslashes($story->summary) }}",
@@ -30,20 +30,20 @@
     "datePublished": "{{ $story->published_at?->toIso8601String() }}",
     "dateModified": "{{ $story->updated_at?->toIso8601String() }}",
     "author": {
-        "@type": "Organization",
+        "@@type": "Organization",
         "name": "Nümizmatik Ansiklopedisi Editoryal Kurulu",
         "url": "{{ route('home') }}"
     },
     "publisher": {
-        "@type": "Organization",
+        "@@type": "Organization",
         "name": "Antik Sikke Bilgi ve Referans Kataloğu",
         "logo": {
-            "@type": "ImageObject",
+            "@@type": "ImageObject",
             "url": "{{ url('/images/logo.png') }}"
         }
     },
     "about": {
-        "@type": "VisualArtifact",
+        "@@type": "VisualArtifact",
         "name": "{{ $story->coin?->title }}",
         "identifier": "{{ $story->coin?->catalog_reference }}"
     }

@@ -1326,3 +1326,12 @@
 #63 C:/Users/taner/Documents/GitHub/Tarih/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//taner//...')
 #64 {main}
 "} 
+[2026-11-01 23:58:22] local.ERROR: Command "tinker" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"tinker\" is not defined. at C:/Users/taner/Documents/GitHub/Tarih/vendor/symfony/console/Application.php:760)
+[stacktrace]
+#0 C:/Users/taner/Documents/GitHub/Tarih/vendor/symfony/console/Application.php(299): Symfony/Component/Console/Application->find('tinker')
+#1 C:/Users/taner/Documents/GitHub/Tarih/vendor/symfony/console/Application.php(196): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#2 C:/Users/taner/Documents/GitHub/Tarih/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 C:/Users/taner/Documents/GitHub/Tarih/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 C:/Users/taner/Documents/GitHub/Tarih/artisan(13): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
+#5 {main}
+"} 

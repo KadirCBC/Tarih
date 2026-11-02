@@ -7,18 +7,18 @@
 @section('schema_org')
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    "@@context": "https://schema.org",
+    "@@type": "CollectionPage",
     "name": "{{ $pageTitle }}",
     "description": "{{ $metaDescription }}",
     "url": "{{ url("/{$slug}") }}",
     "mainEntity": {
-        "@type": "ItemList",
+        "@@type": "ItemList",
         "numberOfItems": {{ $coins->total() }},
         "itemListElement": [
             @foreach($coins as $index => $coin)
             {
-                "@type": "ListItem",
+                "@@type": "ListItem",
                 "position": {{ $index + 1 }},
                 "url": "{{ route('coins.show', $coin->slug) }}",
                 "name": "{{ $coin->title }}"
