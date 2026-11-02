@@ -87,41 +87,41 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Ekmek Kırıntısı (Breadcrumbs) -->
-    <nav class="flex items-center text-xs text-slate-400 mb-6 space-x-2">
-        <a href="{{ route('home') }}" class="hover:text-gold-antique transition">Ana Sayfa</a>
+    <nav class="flex items-center text-xs text-slate-500 dark:text-slate-400 mb-6 space-x-2">
+        <a href="{{ route('home') }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Home</a>
         <span>/</span>
-        <a href="{{ route('coins.index') }}" class="hover:text-gold-antique transition">Katalog</a>
+        <a href="{{ route('coins.index') }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Catalog</a>
         <span>/</span>
         @if($coin->period)
-            <a href="{{ route('periods.show', $coin->period->slug) }}" class="hover:text-gold-antique transition">{{ $coin->period->name }}</a>
+            <a href="{{ route('periods.show', $coin->period->slug) }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">{{ $coin->period->name }}</a>
             <span>/</span>
         @endif
-        <span class="text-slate-200 truncate max-w-xs">{{ $coin->title }}</span>
+        <span class="text-slate-900 dark:text-slate-200 font-semibold truncate max-w-xs">{{ $coin->title }}</span>
     </nav>
 
     @if(session('concordance_info'))
-        <div class="bg-emerald-950/80 border border-emerald-500/50 rounded-xl p-4 mb-6 shadow-lg flex items-center gap-3 text-emerald-200 text-sm">
-            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span><strong>Akıllı Katalog Çözümleyici:</strong> {{ session('concordance_info') }}</span>
+        <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-4 mb-6 shadow-sm flex items-center gap-3 text-emerald-800 dark:text-emerald-200 text-sm">
+            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span><strong>Catalog Concordance:</strong> {{ session('concordance_info') }}</span>
         </div>
     @endif
 
     <!-- 1. YASAL UYARI ROZETİ (2863 Sayılı Kanun Uyarısı) -->
-    <div class="bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-500/30 rounded-xl p-4 mb-8 shadow-lg flex items-center justify-between gap-4">
+    <div class="museum-card p-4 mb-8 flex items-center justify-between gap-4 border-l-4 border-l-amber-600">
         <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 text-gold-antique">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-700 dark:text-gold-dark">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd" />
                 </svg>
             </div>
             <div>
-                <h4 class="text-xs font-bold text-gold-antique uppercase tracking-wider">Kültürel Miras & Akademik Referans Bildirimi</h4>
-                <p class="text-xs text-slate-300">
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">Kültürel Miras & Akademik Referans Bildirimi</h4>
+                <p class="text-xs text-slate-600 dark:text-slate-300">
                     Bu sayfa <strong>2863 sayılı Kültür ve Tabiat Varlıklarını Koruma Kanunu</strong> kapsamında akademik ve eğitim amaçlı nümizmatik arşiv kaydıdır. <strong>Alım-satımı kesinlikle yapılamaz.</strong>
                 </p>
             </div>
         </div>
-        <span class="hidden sm:inline-block bg-amber-500/10 text-gold-antique border border-amber-500/30 text-[11px] font-mono font-semibold px-3 py-1 rounded-md shrink-0">
+        <span class="hidden sm:inline-block bg-amber-500/15 text-amber-800 dark:text-gold-dark border border-amber-500/30 text-[11px] font-mono font-semibold px-3 py-1 rounded-md shrink-0">
             Arşiv Kaydı #{{ str_pad($coin->id, 6, '0', STR_PAD_LEFT) }}
         </span>
     </div>
@@ -149,7 +149,7 @@
                 this.zoomY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
             }
         }"
-        class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl relative overflow-hidden"
+        class="museum-card p-6 sm:p-8 mb-12 shadow-xl relative overflow-hidden"
     >
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
@@ -157,21 +157,21 @@
             <div class="lg:col-span-7 flex flex-col items-center">
                 
                 <!-- Üst Kontrol Sekmeleri & Çevirme Butonu -->
-                <div class="w-full flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                <div class="w-full flex items-center justify-between mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
                     <div class="flex items-center gap-2">
                         <button 
                             type="button"
                             @click="activeFace = 'obverse'"
-                            :class="activeFace === 'obverse' ? 'bg-amber-500/20 text-gold-antique border-amber-500/50 shadow-sm' : 'bg-stone-950 text-slate-400 border-slate-800 hover:text-slate-200'"
-                            class="px-3.5 py-1.5 rounded-xl border text-xs font-semibold font-numis tracking-wider transition duration-150"
+                            :class="activeFace === 'obverse' ? 'bg-amber-500/20 text-amber-900 dark:text-gold-dark border-amber-500/50 shadow-sm' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800'"
+                            class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold font-serif-title tracking-wider transition duration-150"
                         >
                             Ön Yüz (Avers)
                         </button>
                         <button 
                             type="button"
                             @click="activeFace = 'reverse'"
-                            :class="activeFace === 'reverse' ? 'bg-amber-500/20 text-gold-antique border-amber-500/50 shadow-sm' : 'bg-stone-950 text-slate-400 border-slate-800 hover:text-slate-200'"
-                            class="px-3.5 py-1.5 rounded-xl border text-xs font-semibold font-numis tracking-wider transition duration-150"
+                            :class="activeFace === 'reverse' ? 'bg-amber-500/20 text-amber-900 dark:text-gold-dark border-amber-500/50 shadow-sm' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800'"
+                            class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold font-serif-title tracking-wider transition duration-150"
                         >
                             Arka Yüz (Revers)
                         </button>
@@ -181,7 +181,7 @@
                     <button 
                         type="button" 
                         @click="flipCoin()"
-                        class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600/30 to-amber-500/20 hover:from-amber-600/50 hover:to-amber-500/40 border border-amber-500/40 text-gold-antique text-xs font-bold flex items-center gap-1.5 transition shadow-lg"
+                        class="px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-800 dark:text-gold-dark text-xs font-bold flex items-center gap-1.5 transition shadow-sm"
                         title="Sikkenin diğer yüzünü görmek için çevirin"
                     >
                         <span class="inline-block transition-transform duration-300" :class="{'rotate-180': isFlipping}">🔄</span>
@@ -191,7 +191,7 @@
 
                 <!-- İnteraktif Büyüteçli Darp Alanı (Coin Canvas) -->
                 <div 
-                    class="relative w-full max-w-md aspect-square bg-stone-950/90 rounded-3xl border border-slate-800/90 p-8 flex items-center justify-center shadow-inner overflow-hidden cursor-crosshair group select-none"
+                    class="relative w-full max-w-md aspect-square bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 flex items-center justify-center shadow-inner overflow-hidden cursor-crosshair group select-none"
                     @mousemove="handleMouseMove($event)"
                     @mouseenter="zoomActive = true"
                     @mouseleave="zoomActive = false"
@@ -209,7 +209,7 @@
                             x-show="activeFace === 'obverse'"
                             src="{{ $obverseUrl }}" 
                             alt="{{ $coin->title }} - Ön Yüz" 
-                            class="max-h-full max-w-full object-contain rounded-full shadow-2xl transition-transform duration-75 ease-out filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]"
+                            class="max-h-full max-w-full object-contain rounded-full shadow-xl transition-transform duration-75 ease-out filter drop-shadow-md"
                             :style="zoomActive ? `transform: scale(2.4); transform-origin: ${zoomX}% ${zoomY}%;` : 'transform: scale(1);'"
                         >
 
@@ -219,7 +219,7 @@
                             x-cloak
                             src="{{ $reverseUrl }}" 
                             alt="{{ $coin->title }} - Arka Yüz" 
-                            class="max-h-full max-w-full object-contain rounded-full shadow-2xl transition-transform duration-75 ease-out filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]"
+                            class="max-h-full max-w-full object-contain rounded-full shadow-xl transition-transform duration-75 ease-out filter drop-shadow-md"
                             :style="zoomActive ? `transform: scale(2.4); transform-origin: ${zoomX}% ${zoomY}%;` : 'transform: scale(1);'"
                         >
                     </div>
@@ -227,14 +227,14 @@
                     <!-- Büyüteç İpucu Rozeti -->
                     <div 
                         x-show="!zoomActive" 
-                        class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-stone-900/90 border border-slate-700/80 px-3 py-1 rounded-full text-[11px] text-slate-300 font-medium flex items-center gap-1.5 shadow-xl pointer-events-none transition duration-200"
+                        class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full text-[11px] text-slate-700 dark:text-slate-300 font-medium flex items-center gap-1.5 shadow-md pointer-events-none transition duration-200"
                     >
                         <span>🔍</span>
-                        <span>Detaylı patina ve kılcal çatlaklar için fareyle üzerine gelin</span>
+                        <span>Mikroskobik detay için fareyle üzerine gelin</span>
                     </div>
 
                     <!-- Aktif Yüz Bilgisi -->
-                    <div class="absolute top-4 left-4 bg-stone-900/80 border border-slate-800 text-[10px] font-mono text-gold-antique uppercase px-2 py-0.5 rounded-md">
+                    <div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[10px] font-mono text-amber-700 dark:text-gold-dark uppercase px-2.5 py-0.5 rounded-md font-bold">
                         <span x-text="activeFace === 'obverse' ? 'Avers (Ön Yüz)' : 'Revers (Arka Yüz)'"></span>
                     </div>
 
@@ -242,104 +242,143 @@
                     <button 
                         type="button" 
                         @click="openDeepZoom(activeFace === 'obverse' ? '{{ $obverseUrl }}' : '{{ $reverseUrl }}', activeFace === 'obverse' ? '{{ $obverseImg?->id ?? 1 }}' : '{{ $reverseImg?->id ?? 2 }}', activeFace === 'obverse' ? 'Ön Yüz (Avers)' : 'Arka Yüz (Revers)')"
-                        class="absolute top-4 right-4 bg-stone-900/80 hover:bg-gold-antique hover:text-stone-950 text-slate-300 border border-slate-700 text-[11px] font-semibold px-2.5 py-1 rounded-lg transition shadow-lg flex items-center gap-1"
+                        class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-500 dark:hover:text-slate-950 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-[11px] font-semibold px-2.5 py-1 rounded-lg transition shadow-sm flex items-center gap-1"
                         title="IIIF OpenSeadragon ile mikroskobik inceleme"
                     >
                         <span>🔬</span>
                         <span class="hidden sm:inline">IIIF Deep Zoom</span>
                     </button>
                 </div>
+
+                <!-- 1:1 Millimeter Scale Comparison Ruler Bar -->
+                <div class="w-full max-w-md mt-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono mb-1.5">
+                        <span class="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                            <span>📐</span> 1:1 Millimeter Scale Comparison:
+                        </span>
+                        <span class="text-amber-700 dark:text-gold-dark font-bold font-mono">
+                            {{ $coin->diameter_mm ? $coin->diameter_mm . ' mm' : '19.5 mm' }}
+                        </span>
+                    </div>
+                    <!-- Visual Ruler Axis -->
+                    <div class="relative h-6 border-b border-slate-300 dark:border-slate-700 flex items-end justify-between px-1 font-mono text-[9px] text-slate-400 select-none">
+                        <span>0</span>
+                        <span>|</span>
+                        <span>5</span>
+                        <span>|</span>
+                        <span>10</span>
+                        <span>|</span>
+                        <span>15</span>
+                        <span>|</span>
+                        <span>20</span>
+                        <span>|</span>
+                        <span>25</span>
+                        <span>|</span>
+                        <span>30mm</span>
+                    </div>
+                    <div class="mt-1 text-[10px] text-slate-400 text-center font-sans">
+                        Gerçek dünya fiziki sikke çapı ({{ $coin->diameter_mm ?? 19.5 }} mm) mikrometrik kalibrasyonla oranlanmıştır.
+                    </div>
+                </div>
             </div>
 
-            <!-- SAĞ KOLON: BAŞLIK, NADİRLİK & KOMPAKT ÖZELLİKLER TABLOSU (5 Kolon) -->
+            <!-- SAĞ KOLON: BAŞLIK, NADİRLİK & TEKNİK ÖZELLİKLER MATRİSİ (5 Kolon) -->
             <div class="lg:col-span-5 flex flex-col justify-between h-full">
                 <div>
                     <!-- Metal, Nominal ve Nadirlik Rozetleri -->
                     <div class="flex flex-wrap items-center gap-2 mb-3">
-                        <span class="bg-amber-500/15 text-gold-antique border border-amber-500/30 text-xs font-bold px-2.5 py-1 rounded-lg">
+                        <span class="bg-amber-500/15 text-amber-800 dark:text-gold-dark border border-amber-500/30 text-xs font-bold px-2.5 py-1 rounded-lg">
                             {{ $coin->metal->label() }}
                         </span>
-                        <span class="bg-stone-950 text-slate-200 border border-slate-800 text-xs font-mono px-2.5 py-1 rounded-lg">
+                        <span class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-mono px-2.5 py-1 rounded-lg font-bold">
                             {{ $coin->denomination }}
                         </span>
-                        <span class="bg-purple-950/80 border border-purple-500/40 text-purple-300 font-mono text-xs font-bold px-2.5 py-1 rounded-lg">
-                            Nadirlik: {{ $coin->rarity_grade->value }} ({{ $coin->rarity_grade->label() }})
+                        <span class="bg-purple-500/15 border border-purple-500/30 text-purple-800 dark:text-purple-300 font-mono text-xs font-bold px-2.5 py-1 rounded-lg">
+                            Rarity: {{ $coin->rarity_grade->value }} ({{ $coin->rarity_grade->label() }})
                         </span>
                     </div>
 
                     <!-- Başlık -->
-                    <h1 class="font-numis text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-wide mb-2 leading-tight">
+                    <h1 class="font-serif-title text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mb-2 leading-tight">
                         {{ $coin->title }}
                     </h1>
 
                     <!-- Katalog Referansı -->
-                    <p class="text-xs text-slate-400 font-mono mb-6">
-                        Standart Katalog No: <span class="text-gold-antique font-bold text-sm">{{ $coin->catalog_reference }}</span>
+                    <p class="text-xs text-slate-500 font-mono mb-6">
+                        Catalog Reference ID: <span class="text-amber-700 dark:text-gold-dark font-bold text-sm">{{ $coin->catalog_reference }}</span>
                     </p>
 
-                    <!-- KOMPAKT ÖZELLİKLER TABLOSU (Antik Müze Envanteri) -->
-                    <div class="bg-stone-950/80 border border-slate-800 rounded-2xl overflow-hidden divide-y divide-slate-800/80 text-xs mb-6">
+                    <!-- TECHNICAL SPECIFICATIONS MATRIX (Structured Museum Ledger) -->
+                    <div class="museum-card overflow-hidden divide-y divide-slate-100 dark:divide-slate-800/80 text-xs mb-6 shadow-sm">
                         <div class="flex items-center justify-between p-3">
-                            <span class="text-slate-400 font-medium">🏛️ Dönem / Uygarlık:</span>
-                            <span class="font-semibold text-slate-100 text-right">
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">🏛️ Empire / Kingdom:</span>
+                            <span class="font-semibold text-slate-900 dark:text-slate-100 text-right">
                                 {{ $coin->period?->name ?? '—' }}
-                                <span class="text-[10px] text-slate-500 block font-mono">{{ $coin->period?->formatted_date_range }}</span>
+                                <span class="text-[10px] text-slate-400 block font-mono">{{ $coin->period?->formatted_date_range }}</span>
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between p-3">
-                            <span class="text-slate-400 font-medium">👑 Hükümdar / Otorite:</span>
-                            <span class="font-bold text-gold-antique text-right">
-                                {{ $coin->ruler?->name ?? 'Senato / Şehir Devleti' }}
-                                <span class="text-[10px] text-slate-400 block font-sans">{{ $coin->ruler?->title }}</span>
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">👑 Monarch / Authority:</span>
+                            <span class="font-bold text-amber-700 dark:text-gold-dark text-right">
+                                {{ $coin->ruler?->name ?? 'Senate / City State' }}
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">{{ $coin->ruler?->title }}</span>
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between p-3">
-                            <span class="text-slate-400 font-medium">📍 Antik Darphane:</span>
-                            <span class="font-semibold text-slate-200 text-right flex items-center gap-1.5">
-                                {{ $coin->mint?->name ?? 'Bilinmiyor' }}
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">📍 Mint City & Officina:</span>
+                            <span class="font-semibold text-slate-900 dark:text-slate-100 text-right flex items-center gap-1.5">
+                                {{ $coin->mint?->name ?? 'Unknown Mint' }}
                                 @if($coin->mint)
-                                    <a href="{{ route('map.index', ['mint' => $coin->mint->slug]) }}" class="text-[11px] text-gold-antique hover:underline" title="Haritada Konumu İncele">
-                                        (Harita ↗)
+                                    <a href="{{ route('map.index', ['mint' => $coin->mint->slug]) }}" class="text-[11px] text-amber-700 dark:text-gold-dark hover:underline font-bold" title="View on ancient map">
+                                        (Map ↗)
                                     </a>
                                 @endif
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between p-3">
-                            <span class="text-slate-400 font-medium">⚖️ Ağırlık & Çap:</span>
-                            <span class="font-bold text-slate-100 font-mono text-right">
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">⚖️ Weight & Diameter:</span>
+                            <span class="font-bold text-slate-900 dark:text-slate-100 font-mono text-right">
                                 {{ $coin->weight_g ? $coin->weight_g . ' g' : '—' }} / {{ $coin->diameter_mm ? $coin->diameter_mm . ' mm' : '—' }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between p-3">
-                            <span class="text-slate-400 font-medium">🔄 Kalıp Ekseni (Die Axis):</span>
-                            <span class="font-mono text-slate-200 text-right">
-                                {{ $coin->die_axis ?? "12:00 (↑↑ Standart Darp)" }}
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">🔄 Die Axis (Kalıp Yönü):</span>
+                            <span class="font-mono text-slate-800 dark:text-slate-200 text-right">
+                                {{ $coin->die_axis ?? "12:00 (↑↑ 180° Inverted/Regular)" }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3">
+                            <span class="text-slate-500 dark:text-slate-400 font-medium">📜 Academic Standards:</span>
+                            <span class="font-mono text-[11px] text-amber-700 dark:text-gold-dark text-right">
+                                RIC • RPC • BMC • Nomisma LOD
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Şahsi Koleksiyon ve Eylem Butonları -->
+                <!-- Action Buttons: Sanal Koleksiyon & Atıf Kopyalama -->
                 <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
                     <a 
                         href="#collection-section" 
-                        class="w-full sm:flex-1 py-3 px-4 bg-gold-antique hover:bg-gold-hover text-stone-950 font-bold text-xs rounded-xl transition duration-150 shadow-lg shadow-amber-500/20 text-center flex items-center justify-center gap-1.5"
+                        class="w-full sm:flex-1 py-3 px-4 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs rounded-xl transition duration-150 shadow-md shadow-amber-600/20 text-center flex items-center justify-center gap-1.5 active:scale-98"
                     >
                         <span>📖</span>
-                        <span>Sanal Koleksiyonuma Ekle</span>
+                        <span>Add to Personal Collection</span>
                     </a>
 
-                    <a 
-                        href="#deviationCalculator" 
-                        class="w-full sm:w-auto py-3 px-4 bg-stone-950 hover:bg-stone-800 text-slate-300 hover:text-white border border-slate-700 font-semibold text-xs rounded-xl transition duration-150 text-center flex items-center justify-center gap-1.5"
+                    <button 
+                        type="button" 
+                        onclick="copyCitation()"
+                        class="w-full sm:w-auto py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold text-xs rounded-xl transition duration-150 text-center flex items-center justify-center gap-1.5 shadow-sm"
                     >
-                        <span>⚖️</span>
-                        <span>Sahte & Sapma Analizi</span>
-                    </a>
+                        <span>📋</span>
+                        <span id="citationBtnText">Copy Academic Citation</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -408,7 +447,7 @@
                 this.selectedToken = (this.selectedToken === t) ? null : t;
             }
         }"
-        class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl"
+        class="museum-card p-6 sm:p-8 mb-12 shadow-sm dark:shadow-2xl"
     >
         <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
             <h2 class="font-numis text-xl font-bold text-slate-100 tracking-wider flex items-center gap-2">
@@ -421,7 +460,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             <!-- ÖN YÜZ LEJANTI & KELİME KELİME ETKİLEŞİMLİ MORFOLOJİ -->
-            <div class="bg-stone-950/80 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-50/80 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs font-bold text-gold-antique uppercase font-numis tracking-wider">
@@ -431,13 +470,13 @@
                     </div>
 
                     <!-- Kelime Kelime Tıklanabilir Piller -->
-                    <div class="bg-stone-900 border border-slate-800 rounded-2xl p-4 mb-4">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-4">
                         <div class="flex flex-wrap gap-2 items-center">
                             @forelse($obverseTokens as $item)
                                 <button 
                                     type="button"
                                     @click="selectToken('{{ $item['token'] }}')"
-                                    :class="selectedToken === '{{ $item['token'] }}' ? 'bg-amber-500 text-stone-950 font-extrabold border-amber-400 shadow-md scale-105' : 'bg-stone-950 hover:bg-stone-800 text-slate-200 border-slate-700'"
+                                    :class="selectedToken === '{{ $item['token'] }}' ? 'bg-amber-600 text-white font-extrabold border-amber-600 shadow-md scale-105' : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-950 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700'"
                                     class="px-3 py-1.5 rounded-xl border text-sm font-legend font-semibold transition duration-150 transform"
                                 >
                                     {{ $item['token'] }}
@@ -497,7 +536,7 @@
             </div>
 
             <!-- ARKA YÜZ LEJANTI & İKONOGRAFİK FİGÜR AÇIKLAMASI -->
-            <div class="bg-stone-950/80 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-50/80 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs font-bold text-gold-antique uppercase font-numis tracking-wider">
@@ -507,7 +546,7 @@
                     </div>
 
                     <!-- Orijinal Revers Metni -->
-                    <div class="bg-stone-900 border border-slate-800 rounded-2xl p-4 mb-4 font-legend text-base text-slate-100 tracking-widest break-words">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-4 font-legend text-base text-slate-800 dark:text-slate-100 tracking-widest break-words">
                         {{ $coin->reverse_legend ?? 'YAZISIZ (ANEPIGRAPHIC)' }}
                     </div>
 
@@ -524,7 +563,7 @@
                     @endif
 
                     <!-- Tasvir Edilen Mitolojik / İmp. Figür -->
-                    <div class="p-4 bg-stone-900/90 border border-slate-800 rounded-xl mb-4">
+                    <div class="p-4 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl mb-4">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-amber-400 text-sm">🦅</span>
                             <h4 class="text-xs font-bold text-slate-100 uppercase tracking-wider font-numis">
@@ -600,7 +639,7 @@
                 }
             }
         }"
-        class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl"
+        class="museum-card p-6 sm:p-8 mb-12 shadow-sm dark:shadow-2xl"
     >
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-slate-800">
             <div>
@@ -625,7 +664,7 @@
                 <button 
                     type="button" 
                     @click="selectedGrade = key"
-                    :class="selectedGrade === key ? 'border-gold-antique bg-amber-500/10 shadow-lg shadow-amber-500/10 scale-102 ring-1 ring-gold-antique' : 'border-slate-800 bg-stone-950 hover:bg-stone-850 opacity-80'"
+                    :class="selectedGrade === key ? 'border-amber-600 dark:border-gold-antique bg-amber-50 dark:bg-amber-500/10 shadow-md ring-1 ring-amber-600 dark:ring-gold-antique' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-850 opacity-90'"
                     class="p-3.5 rounded-2xl border text-center transition duration-150 flex flex-col items-center justify-center gap-1"
                 >
                     <span class="font-numis font-extrabold text-base" :class="selectedGrade === key ? 'text-gold-antique' : 'text-slate-200'" x-text="key"></span>
@@ -635,7 +674,7 @@
         </div>
 
         <!-- Canlı Dinamik Değer & Aşınma Kartı -->
-        <div class="bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <div class="bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
             <!-- Tahmini Referans Müzayede Fiyatı (5 Kolon) -->
             <div class="md:col-span-5 border-b md:border-b-0 md:border-r border-slate-800 pb-6 md:pb-0 md:pr-6">
@@ -661,7 +700,7 @@
                 </div>
 
                 <!-- İlerleme Çubuğu (Wear Bar) -->
-                <div class="w-full h-3 bg-stone-950 rounded-full border border-slate-800 overflow-hidden mb-3">
+                <div class="w-full h-3 bg-slate-200 dark:bg-slate-900 rounded-full border border-slate-300 dark:border-slate-800 overflow-hidden mb-3">
                     <div 
                         class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 transition-all duration-300 rounded-full"
                         :style="`width: ${100 - grades[selectedGrade].wearPercent}%;`"
@@ -738,7 +777,7 @@
     <!-- ========================================================================= -->
     <!-- 5. ŞAHSİ KOLEKSİYON DEFTERİNE EKLEME FORMU                                -->
     <!-- ========================================================================= -->
-    <div id="collection-section" class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl">
+    <div id="collection-section" class="museum-card p-6 sm:p-8 mb-12 shadow-sm dark:shadow-2xl">
         <h4 class="text-sm font-bold text-gold-antique uppercase font-numis tracking-wider mb-4 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -749,7 +788,7 @@
             @csrf
             <div>
                 <label class="block text-[11px] text-slate-400 mb-1">Elinizdeki Kondisyon *</label>
-                <select name="user_condition" required class="w-full bg-stone-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                <select name="user_condition" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500">
                     @foreach($conditionGrades as $grade)
                         <option value="{{ $grade->value }}" {{ $grade->value === 'VF' ? 'selected' : '' }}>
                             {{ $grade->value }} - {{ $grade->label() }}
@@ -759,29 +798,29 @@
             </div>
             <div>
                 <label class="block text-[11px] text-slate-400 mb-1">Edinme Bedeli (USD, Opsiyonel)</label>
-                <input type="number" step="0.01" name="purchase_price_usd" placeholder="Örn: 350.00" class="w-full bg-stone-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                <input type="number" step="0.01" name="purchase_price_usd" placeholder="Örn: 350.00" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
             </div>
             <div>
                 <label class="block text-[11px] text-slate-400 mb-1">Sikkenizin Fotoğrafı (Opsiyonel)</label>
-                <input type="file" name="custom_image" accept="image/*" class="w-full bg-stone-950 border border-slate-700 rounded-xl px-2 py-2 text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-stone-800 file:text-slate-300">
+                <input type="file" name="custom_image" accept="image/*" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-2 text-xs text-slate-600 dark:text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-slate-200 dark:file:bg-stone-800 file:text-slate-700 dark:file:text-slate-300">
             </div>
             <div>
                 <label class="block text-[11px] text-slate-400 mb-1">Kişisel Notunuz</label>
-                <input type="text" name="notes" placeholder="Örn: 2024 İstanbul sergisinden" class="w-full bg-stone-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                <input type="text" name="notes" placeholder="Örn: 2024 İstanbul sergisinden" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
             </div>
             <div class="flex items-end">
-                <button type="submit" class="w-full bg-gold-antique hover:bg-gold-hover text-stone-950 font-bold py-2.5 px-4 rounded-xl text-xs transition duration-150 shadow-md">
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition duration-150 shadow-md">
                     Envanterime Kaydet
                 </button>
             </div>
             <div class="sm:col-span-2 lg:col-span-5 pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <label class="flex items-center gap-2 cursor-pointer text-xs text-gold-antique font-semibold select-none">
-                    <input type="checkbox" id="has_mint_error_checkbox" name="has_mint_error" value="1" onchange="document.getElementById('mint_error_options').classList.toggle('hidden', !this.checked)" class="rounded border-slate-700 bg-stone-950 text-amber-500 focus:ring-amber-500">
+                    <input type="checkbox" id="has_mint_error_checkbox" name="has_mint_error" value="1" onchange="document.getElementById('mint_error_options').classList.toggle('hidden', !this.checked)" class="rounded border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-amber-600 focus:ring-amber-500">
                     <span>⚡ Bu Sikkede Darp Hatası Var mı? (Off-Center, Brockage, Çift Darp vb.)</span>
                 </label>
 
                 <div id="mint_error_options" class="hidden flex-1 flex items-center gap-2 w-full sm:w-auto">
-                    <select name="mint_error_type_id" class="bg-stone-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                    <select name="mint_error_type_id" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500">
                         <option value="">-- Hata Türü Seçin --</option>
                         <option value="1">Off-Center Strike (Merkezleme Kayması - 1.5x-4x)</option>
                         <option value="2">Double Die (Çift Darp - 2x-5x)</option>
@@ -790,13 +829,13 @@
                         <option value="5">Overstrike (Yeniden Basım - 3x-8x)</option>
                         <option value="6">Clipped Planchet (Kesik Pul - 1.5x-3x)</option>
                     </select>
-                    <input type="text" name="mint_error_notes" placeholder="Örn: %35 sağa kayık" class="flex-1 bg-stone-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                    <input type="text" name="mint_error_notes" placeholder="Örn: %35 sağa kayık" class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
                     <a href="{{ route('mint-errors.index') }}" target="_blank" class="text-[11px] text-gold-antique hover:underline shrink-0 font-medium">Rehber &rarr;</a>
                 </div>
             </div>
             <div class="sm:col-span-2 lg:col-span-5 pt-1">
                 <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-400 select-none">
-                    <input type="checkbox" name="legal_declaration" value="1" class="rounded border-slate-700 bg-stone-950 text-amber-500 focus:ring-amber-500">
+                    <input type="checkbox" name="legal_declaration" value="1" class="rounded border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-amber-600 focus:ring-amber-500">
                     <span>Bu görselin yasal haklarına sahibim / kişisel koleksiyon veya açık kaynak amaçlı ekliyorum (2863 sayılı kanun hükümleri saklıdır).</span>
                 </label>
             </div>
@@ -807,7 +846,7 @@
     <!-- 6. TARİHSEL BAĞLAM VE FİZİKSEL SAPMA / SAHTELİK DOĞRULAMA ARACI           -->
     <!-- ========================================================================= -->
     @if($coin->historical_notes)
-        <div class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl">
+        <div class="museum-card p-6 sm:p-8 mb-12 shadow-sm dark:shadow-2xl">
             <h3 class="font-numis text-xl font-bold text-slate-100 tracking-wider mb-4 flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-gold-antique"></span>
                 TARİHSEL BAĞLAM VE NÜMİZMATİK NOTLAR
@@ -819,7 +858,7 @@
     @endif
 
     <!-- Fiziksel Sapma ve Sahtelik Doğrulama Aracı -->
-    <div class="bg-stone-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-12 shadow-2xl" id="deviationCalculator">
+    <div class="museum-card p-6 sm:p-8 mb-12 shadow-sm dark:shadow-2xl" id="deviationCalculator">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
             <div>
                 <h3 class="font-numis text-xl font-bold text-slate-100 tracking-wider flex items-center gap-2">
@@ -846,7 +885,7 @@
                     Hassas Terazi ile Ölçülen Ağırlık (Gram) *
                 </label>
                 <div class="relative">
-                    <input type="number" id="inputWeight" step="0.01" placeholder="Örn: {{ $coin->weight_g ?? '3.40' }}" class="w-full bg-stone-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm">
+                    <input type="number" id="inputWeight" step="0.01" placeholder="Örn: {{ $coin->weight_g ?? '3.40' }}" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm">
                     <span class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400 font-mono text-xs">g</span>
                 </div>
             </div>
@@ -855,7 +894,7 @@
                     Kumpas ile Ölçülen Çap (Milimetre, Opsiyonel)
                 </label>
                 <div class="relative">
-                    <input type="number" id="inputDiameter" step="0.1" placeholder="Örn: {{ $coin->diameter_mm ?? '19.0' }}" class="w-full bg-stone-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm">
+                    <input type="number" id="inputDiameter" step="0.1" placeholder="Örn: {{ $coin->diameter_mm ?? '19.0' }}" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm">
                     <span class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400 font-mono text-xs">mm</span>
                 </div>
             </div>
@@ -922,8 +961,8 @@
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($similarCoins as $similar)
-                    <a href="{{ route('coins.show', $similar->slug) }}" class="bg-stone-900 border border-slate-800 hover:border-gold-antique/50 rounded-2xl overflow-hidden p-4 group transition flex flex-col justify-between shadow-xl">
-                        <div class="aspect-square bg-stone-950 rounded-xl p-3 flex items-center justify-center mb-3">
+                    <a href="{{ route('coins.show', $similar->slug) }}" class="museum-card hover:border-amber-500/50 rounded-2xl overflow-hidden p-4 group transition flex flex-col justify-between shadow-sm dark:shadow-xl">
+                        <div class="aspect-square bg-slate-100 dark:bg-slate-950 rounded-xl p-3 flex items-center justify-center mb-3">
                             @if($similar->primaryImage)
                                 <img src="{{ $similar->primaryImage->url }}" alt="{{ $similar->title }}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-200">
                             @else

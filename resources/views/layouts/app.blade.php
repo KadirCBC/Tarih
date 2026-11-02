@@ -4,45 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <title>@yield('title', 'Antik Sikke Ansiklopedisi ve Nümizmatik Müze Kataloğu')</title>
-    <meta name="description" content="@yield('meta_description', 'Akademik antik sikke kataloğu, Roma, Grek ve Bizans lejant çözümlemeleri, nadirlik dereceleri ve uluslararası müzayede referans değerleri.')">
+    <title>@yield('title', 'Historical Coin & Numismatic Encyclopedia - Classical & Royal Numismatics')</title>
+    <meta name="description" content="@yield('meta_description', 'Comprehensive corporate encyclopedic archive of historical, ancient, and royal coins. Epigraphic decipherment, technical specifications, and verified auction valuations.')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
 
     <!-- Open Graph / Sosyal Medya Meta Etiketleri -->
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('title', 'Antik Sikke Ansiklopedisi')">
-    <meta property="og:description" content="@yield('meta_description', 'Antik nümizmatik bilgi ve müze referans kataloğu.')">
+    <meta property="og:title" content="@yield('title', 'Historical Coin & Numismatic Encyclopedia')">
+    <meta property="og:description" content="@yield('meta_description', 'Classical, ancient and imperial numismatic reference catalog.')">
     <meta property="og:url" content="{{ url()->current() }}">
     @yield('og_image')
 
     <!-- PWA & Mobile Web App Manifest -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" id="meta-theme-color" content="#F5F5F7">
+    <meta name="theme-color" id="meta-theme-color" content="#F8FAFC">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Nümizmatik">
+    <meta name="apple-mobile-web-app-title" content="Numismatics">
 
-    <!-- 🍎 Apple iOS Theme Controller (Sıfır Gecikme / Zero-FOUC) -->
+    <!-- 🌓 Zero-FOUC Theme Init (Light / Dark) -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('numis_theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
                 document.documentElement.classList.add('dark');
-                document.getElementById('meta-theme-color')?.setAttribute('content', '#070A11');
+                document.getElementById('meta-theme-color')?.setAttribute('content', '#090D16');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.getElementById('meta-theme-color')?.setAttribute('content', '#F5F5F7');
+                document.getElementById('meta-theme-color')?.setAttribute('content', '#F8FAFC');
             }
         })();
     </script>
 
-    <!-- Tipografi: Poppins & Cinzel Antik Lejant Başlıkları -->
+    <!-- Tipografi: Playfair Display & Cinzel (Serif) + Poppins & Inter (Sans-Serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS CDN & Genişletilmiş Tema Yapılandırması -->
+    <!-- Leaflet Harita Desteği (Detail Map View) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -50,479 +54,379 @@
             theme: {
                 extend: {
                     colors: {
-                        ios: {
-                            bg: '#F5F5F7',
-                            card: '#FFFFFF',
-                            darkBg: '#070A11',
-                            darkCard: '#111827',
-                        },
-                        stone: {
-                            950: '#070A11',
-                            900: '#0F172A',
-                            850: '#161E2E',
-                            800: '#1F293D',
-                        },
                         gold: {
-                            antique: '#D4AF37',
-                            light: '#F3E5AB',
-                            hover: '#E5C158',
-                            burnished: '#B8860B',
-                            dark: '#996515',
+                            corporate: '#C5A059',
+                            hover: '#B89047',
+                            light: '#F5E6C8',
+                            dark: '#D4AF37',
+                            burnished: '#99732B',
                         },
-                        silver: {
-                            antique: '#C0C0C0',
-                            patina: '#94A3B8',
-                            light: '#E2E8F0',
-                        },
-                        patina: {
-                            green: '#2E8B57',
-                            dark: '#1B4D3E',
-                            teal: '#164E63',
-                        },
-                        bronze: {
-                            antique: '#8B5A2B',
-                            deep: '#5C3A21',
-                        },
+                        slate: {
+                            850: '#131B2E',
+                            950: '#090D16',
+                        }
                     },
                     fontFamily: {
+                        serif: ['Playfair Display', 'Cinzel', 'Georgia', 'serif'],
                         numis: ['Cinzel', 'Playfair Display', 'serif'],
-                        serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
-                        decorative: ['Cinzel Decorative', 'serif'],
-                        sans: ['Poppins', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+                        sans: ['Poppins', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
                     },
                     boxShadow: {
-                        'ios-glass': '0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.04)',
-                        'ios-card': '0 14px 34px -10px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
-                        'ios-dark-card': '0 20px 45px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-                        'numis-gold': '0 0 25px -5px rgba(212, 175, 55, 0.25)',
+                        'museum-light': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 1px 1px rgba(15, 23, 42, 0.03)',
+                        'museum-dark': '0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
+                        'gold-glow': '0 0 25px -4px rgba(197, 160, 89, 0.35)',
                     }
                 }
             }
         }
     </script>
 
-    <!-- Alpine.js (Reaktif Tema, Mobil Menü, Açılır Pencereler & Etkileşim) -->
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
-    <!-- 🎨 iPhone Glassmorphism (Cam Efekti) & Kurumsal Tasarım Stilleri -->
     <style>
         [x-cloak] { display: none !important; }
 
+        /* V0 Numismatic Corporate Theme Tokens */
         :root {
-            --ios-bg: #F5F5F7;
-            --ios-text: #0F172A;
-            --ios-text-muted: #64748B;
-            --ios-glass-bg: rgba(255, 255, 255, 0.78);
-            --ios-glass-border: rgba(0, 0, 0, 0.07);
-            --ios-glass-card-bg: rgba(255, 255, 255, 0.84);
-            --ios-glass-card-border: rgba(255, 255, 255, 0.8);
-            --ios-glass-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 0 1px 1px rgba(0, 0, 0, 0.03);
-            --ios-glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+            --bg-canvas: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --bg-card-subtle: #F1F5F9;
+            --text-heading: #0F172A;
+            --text-body: #334155;
+            --text-muted: #64748B;
+            --border-primary: #E2E8F0;
+            --border-subtle: #EDF2F7;
+            --gold-accent: #C5A059;
+            --gold-badge-bg: rgba(197, 160, 89, 0.12);
+            --gold-badge-border: rgba(197, 160, 89, 0.3);
+            --header-glass: rgba(255, 255, 255, 0.88);
+            --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
         }
 
         html.dark {
-            --ios-bg: #070A11;
-            --ios-text: #F8FAFC;
-            --ios-text-muted: #94A3B8;
-            --ios-glass-bg: rgba(13, 18, 30, 0.72);
-            --ios-glass-border: rgba(255, 255, 255, 0.09);
-            --ios-glass-card-bg: rgba(17, 24, 39, 0.68);
-            --ios-glass-card-border: rgba(255, 255, 255, 0.08);
-            --ios-glass-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.06);
-            --ios-glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+            --bg-canvas: #090D16;
+            --bg-card: #131B2E;
+            --bg-card-subtle: #0E1524;
+            --text-heading: #F8FAFC;
+            --text-body: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border-primary: #1E293B;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --gold-accent: #D4AF37;
+            --gold-badge-bg: rgba(212, 175, 55, 0.15);
+            --gold-badge-border: rgba(212, 175, 55, 0.35);
+            --header-glass: rgba(9, 13, 22, 0.88);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.55), 0 0 1px 1px rgba(255, 255, 255, 0.07);
         }
 
         body {
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Ambient Apple Işıltısı (Specular Ambient Glow) */
-        .ios-ambient-glow {
-            background-image: 
-                radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.10) 0%, transparent 45%),
-                radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.03) 0%, transparent 35%),
-                radial-gradient(circle at 15% 35%, rgba(46, 139, 87, 0.03) 0%, transparent 35%);
-            background-attachment: fixed;
-        }
-        html.dark .ios-ambient-glow {
-            background-image: 
-                radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.03) 0%, transparent 35%);
-            background-attachment: fixed;
+        .museum-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            box-shadow: var(--card-shadow);
+            border-radius: 1rem;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 📱 iOS Cam Efekti Çekirdek Sınıfları */
-        .ios-glass {
-            background: var(--ios-glass-bg) !important;
-            backdrop-filter: blur(24px) saturate(190%);
-            -webkit-backdrop-filter: blur(24px) saturate(190%);
-            border: 1px solid var(--ios-glass-border) !important;
-            box-shadow: var(--ios-glass-shadow);
+        .museum-card:hover {
+            border-color: var(--gold-accent);
         }
 
-        .ios-glass-card {
-            background: var(--ios-glass-card-bg) !important;
-            backdrop-filter: blur(24px) saturate(190%);
-            -webkit-backdrop-filter: blur(24px) saturate(190%);
-            border: 1px solid var(--ios-glass-card-border) !important;
-            box-shadow: var(--ios-glass-shadow), var(--ios-glass-highlight);
-            border-radius: 1.5rem;
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease;
-        }
-
-        .ios-glass-card:hover {
-            border-color: rgba(212, 175, 55, 0.45) !important;
-        }
-
-        .font-legend {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 0.06em;
-        }
-
-        /* 💡 Beyaz Modda Dark Sınıflarının Otomatik Cam Efektine Dönüşümü */
-        html:not(.dark) .bg-slate-900,
-        html:not(.dark) .bg-stone-900 {
-            background-color: rgba(255, 255, 255, 0.84) !important;
+        .header-glass {
+            background-color: var(--header-glass);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-color: rgba(0, 0, 0, 0.07) !important;
-            color: #0f172a !important;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--border-primary);
         }
 
-        html:not(.dark) .bg-slate-950,
-        html:not(.dark) .bg-stone-950 {
-            background-color: rgba(243, 244, 246, 0.85) !important;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-color: rgba(0, 0, 0, 0.06) !important;
-            color: #0f172a !important;
+        .font-numis {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            letter-spacing: 0.04em;
         }
 
-        html:not(.dark) .bg-slate-800,
-        html:not(.dark) .bg-stone-800 {
-            background-color: rgba(229, 231, 235, 0.75) !important;
-            color: #1e293b !important;
-            border-color: rgba(0, 0, 0, 0.06) !important;
+        .font-serif-title {
+            font-family: 'Playfair Display', 'Cinzel', serif;
         }
 
-        html:not(.dark) .text-slate-100,
-        html:not(.dark) .text-slate-200,
-        html:not(.dark) .text-white {
-            color: #0f172a !important;
+        /* Ambient Museum Glow */
+        .ambient-museum {
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 90% 10%, rgba(99, 102, 241, 0.03) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        html.dark .ambient-museum {
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 55%),
+                radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
-        html:not(.dark) .text-slate-300,
-        html:not(.dark) .text-slate-400 {
-            color: #475569 !important;
-        }
-
-        html:not(.dark) .text-slate-500 {
-            color: #64748b !important;
-        }
-
-        html:not(.dark) .border-slate-800,
-        html:not(.dark) .border-slate-700 {
-            border-color: rgba(0, 0, 0, 0.08) !important;
-        }
-
-        html:not(.dark) select,
-        html:not(.dark) input:not([type="checkbox"]) {
-            background-color: rgba(255, 255, 255, 0.9) !important;
-            color: #0f172a !important;
-            border-color: rgba(0, 0, 0, 0.12) !important;
-        }
-        html:not(.dark) select option {
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-        }
-
-        /* Pürüzsüz Scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.35);
+            background: rgba(148, 163, 184, 0.4);
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(212, 175, 55, 0.5);
+            background: var(--gold-accent);
         }
     </style>
 </head>
 <body 
     x-data="{
-        currentTheme: localStorage.getItem('numis_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+        theme: localStorage.getItem('numis_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
         mobileMenuOpen: false,
-        periodDropdownOpen: false,
+        megaMenuOpen: false,
         toggleTheme() {
-            this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('numis_theme', this.currentTheme);
-            if (this.currentTheme === 'dark') {
+            this.theme = this.theme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('numis_theme', this.theme);
+            if (this.theme === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.getElementById('meta-theme-color')?.setAttribute('content', '#070A11');
+                document.getElementById('meta-theme-color')?.setAttribute('content', '#090D16');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.getElementById('meta-theme-color')?.setAttribute('content', '#F5F5F7');
+                document.getElementById('meta-theme-color')?.setAttribute('content', '#F8FAFC');
             }
         }
     }"
-    class="min-h-full flex flex-col font-sans ios-ambient-glow selection:bg-amber-500/30 selection:text-amber-800 dark:selection:text-amber-200"
+    class="min-h-full flex flex-col ambient-museum selection:bg-amber-500/25 selection:text-amber-900 dark:selection:text-amber-200"
 >
 
-    <!-- 1. Apple Dynamic Island Tarzı 2863 Sayılı Kanun Yasal Uyarı Bildirim Kapsülü -->
-    <div class="pt-2 px-4 pb-1 z-50">
-        <div class="max-w-5xl mx-auto rounded-full py-1.5 px-4 ios-glass flex items-center justify-between gap-3 text-[11px] text-slate-600 dark:text-slate-300 tracking-wide shadow-sm">
+    <!-- 1. Top Bar: 2863 Sayılı Kanun & Institutional Museum Banner (Full Width) -->
+    <div class="border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-100/90 dark:bg-slate-950/90 text-[11px] py-1.5 px-6 lg:px-10 transition">
+        <div class="w-full flex items-center justify-between gap-4">
             <div class="flex items-center gap-2 overflow-hidden truncate">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 shrink-0">
-                    🏛️ 2863 SAYILI KANUN
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-mono tracking-wider shrink-0">
+                    🏛️ 2863 SAYILI KANUN UYARINCA
                 </span>
-                <span class="truncate">
-                    Akademik ve kültürel nümizmatik arşividir. <strong class="font-semibold text-slate-800 dark:text-slate-100">Ticari alım-satım kesinlikle yapılmamaktadır.</strong>
+                <span class="text-slate-600 dark:text-slate-400 truncate">
+                    Platformumuz akademik, bilimsel araştırma ve nümizmatik eğitim amaçlıdır. <strong class="text-slate-900 dark:text-slate-200 font-semibold">Tarihi eserlerin ticari alım-satımı kesinlikle yapılmamaktadır.</strong>
                 </span>
             </div>
-
-            <!-- Hızlı Güvenlik Rozeti -->
-            <div class="hidden sm:flex items-center gap-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                <span>Doğrulanmış Müze Standartları</span>
+            <div class="hidden md:flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 shrink-0 font-medium">
+                <span class="inline-flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Nomisma.org LOD & IIIF 3.0 Standardı</span>
+                </span>
+                <span>•</span>
+                <a href="{{ route('epigraphy.index') }}" class="hover:text-amber-600 dark:hover:text-gold-dark transition">Lejant Çözücü</a>
+                <span>•</span>
+                <a href="{{ route('quiz.index') }}" class="hover:text-amber-600 dark:hover:text-gold-dark transition">Günün Sikkesi</a>
             </div>
         </div>
     </div>
 
-    <!-- 2. Apple iPhone Tarzı Yüzen Cam (Frosted Glass) Üst Menü -->
-    <header class="sticky top-2 z-40 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-1 transition duration-300">
-        <div class="ios-glass rounded-2xl sm:rounded-3xl px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-4 shadow-lg shadow-black/[0.03] dark:shadow-black/40">
+    <!-- 2. Corporate Navigation Header (site-header - Exact V0 Full Width Design) -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#090D16]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition duration-200">
+        <div class="w-full px-6 lg:px-10">
+            <div class="flex items-center justify-between h-16 gap-6">
 
-            <!-- Logo & Marka -->
-            <div class="flex items-center gap-3 shrink-0">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-500/20 via-white/50 dark:via-slate-800 to-amber-600/30 border border-amber-500/40 flex items-center justify-center shadow-md group-hover:scale-105 group-hover:border-gold-antique transition duration-300">
-                        <span class="text-gold-burnished dark:text-gold-antique font-numis font-bold text-lg select-none">🏛️</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-numis font-extrabold text-base sm:text-lg tracking-wider text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-gold-antique transition">
-                            NÜMİZMATİK
+                <!-- Left: Circular N Badge + Numisma Brand + Menu Links -->
+                <div class="flex items-center gap-7">
+                    <!-- Brand: Circular Gold Badge 'N' + Numisma -->
+                    <a href="{{ route('home') }}" class="flex items-center gap-2.5 group shrink-0">
+                        <div class="w-8 h-8 rounded-full border border-amber-600/70 dark:border-amber-400/70 flex items-center justify-center font-serif font-bold text-sm text-amber-700 dark:text-amber-400 select-none group-hover:border-amber-700 transition">
+                            N
+                        </div>
+                        <span class="font-serif text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition">
+                            Numisma
                         </span>
-                        <span class="text-[9px] uppercase tracking-widest text-amber-600 dark:text-gold-antique/90 font-mono -mt-1 font-semibold">
-                            Müze Kataloğu
-                        </span>
-                    </div>
-                </a>
-            </div>
+                    </a>
 
-            <!-- Apple Spotlight Tarzı Arama Çubuğu (Desktop) -->
-            <div class="hidden lg:flex flex-1 max-w-md mx-4">
-                <form action="{{ route('home') }}" method="GET" class="w-full relative group">
-                    <input 
-                        type="text" 
-                        name="q" 
-                        value="{{ request('q') }}"
-                        placeholder="Sikke, lejant veya RIC referansı ara... (Örn: Trajan, Denarius)" 
-                        class="w-full bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.1] rounded-2xl px-4 py-2.5 pl-10 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900/90 focus:border-amber-500/70 focus:ring-2 focus:ring-amber-500/20 transition shadow-inner"
-                    >
-                    <svg class="w-4 h-4 text-slate-400 group-focus-within:text-amber-500 absolute left-3.5 top-3 pointer-events-none transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <span class="absolute right-2.5 top-2 px-1.5 py-0.5 rounded-lg text-[10px] bg-black/[0.05] dark:bg-white/[0.1] border border-black/[0.05] dark:border-white/[0.1] text-slate-400 font-mono select-none pointer-events-none">
-                        ⌘K
-                    </span>
-                </form>
-            </div>
+                    <!-- Nav Links: Eras, Kingdoms, Catalogue -->
+                    <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700 dark:text-slate-300">
+                        
+                        <!-- Eras Dropdown -->
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                            <button 
+                                @click="open = !open" 
+                                type="button"
+                                class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition py-2 cursor-pointer font-medium"
+                            >
+                                <span>Eras</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
 
-            <!-- Navigasyon Bağlantıları & Kontroller -->
-            <nav class="hidden md:flex items-center gap-4 text-xs font-medium text-slate-700 dark:text-slate-300">
-                
-                <!-- Dönemler Açılır Menüsü (Dropdown) -->
-                <div class="relative" @click.away="periodDropdownOpen = false">
+                            <div 
+                                x-show="open" 
+                                x-cloak
+                                x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0 translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-100"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 translate-y-1"
+                                class="absolute left-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2.5 z-50 divide-y divide-slate-100 dark:divide-slate-800"
+                            >
+                                <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    Kronolojik Dönemler
+                                </div>
+                                <div class="py-1 space-y-0.5">
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Lydia & Anadolu</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.Ö. 650–546</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Arkaik & Klasik Grek</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.Ö. 600–323</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Hellenistik Krallıklar</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.Ö. 323–31</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Roma Cumhuriyeti</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.Ö. 509–27</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Roma İmparatorluğu</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.Ö. 27–476</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Bizans İmparatorluğu</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.S. 491–1453</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">İslami Hilafetler</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.S. 661–1258</span>
+                                    </a>
+                                    <a href="{{ route('home') }}#catalog" class="flex items-center justify-between px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                        <span class="font-medium">Osmanlı İmparatorluğu</span>
+                                        <span class="text-[10px] font-mono text-slate-400">M.S. 1299–1922</span>
+                                    </a>
+                                </div>
+                                <div class="pt-2 px-4 pb-1">
+                                    <a href="{{ route('home') }}#catalog" class="text-amber-700 dark:text-gold-dark hover:underline font-semibold block text-[11px]">
+                                        Tüm Dönemleri Gör &rarr;
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kingdoms Dropdown -->
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                            <button 
+                                @click="open = !open" 
+                                type="button"
+                                class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition py-2 cursor-pointer font-medium"
+                            >
+                                <span>Kingdoms</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div 
+                                x-show="open" 
+                                x-cloak
+                                x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0 translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-100"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 translate-y-1"
+                                class="absolute left-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2.5 z-50 divide-y divide-slate-100 dark:divide-slate-800"
+                            >
+                                <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    Hanedanlar & Krallıklar
+                                </div>
+                                <div class="py-1 space-y-0.5">
+                                    <a href="{{ route('coins.search', ['q' => 'Augustus']) }}" class="block px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition font-medium">Julio-Claudian Hanedanı</a>
+                                    <a href="{{ route('coins.search', ['q' => 'Trajan']) }}" class="block px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition font-medium">Nerva-Antonin Hanedanı</a>
+                                    <a href="{{ route('coins.search', ['q' => 'Constantine']) }}" class="block px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition font-medium">Konstantin Hanedanı</a>
+                                    <a href="{{ route('coins.search', ['q' => 'Alexander']) }}" class="block px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition font-medium">Makedon Krallığı</a>
+                                    <a href="{{ route('coins.search', ['q' => 'Fatih']) }}" class="block px-4 py-2 text-xs hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition font-medium">Osmanlı Sultanları</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Catalogue -->
+                        <a href="{{ route('home') }}#catalog" class="hover:text-slate-900 dark:hover:text-white transition font-medium">
+                            Catalogue
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Right: Search Bar + Theme Toggle Button (Exact Image 1) -->
+                <div class="flex items-center gap-3">
+                    
+                    <!-- Search Input (Exact replica of Image 1) -->
+                    <form action="{{ route('coins.search') }}" method="GET" class="relative">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            value="{{ request('q') }}"
+                            placeholder="Search coins, rulers, legends..." 
+                            class="w-56 sm:w-72 md:w-80 lg:w-96 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition shadow-sm"
+                        >
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </form>
+
+                    <!-- Theme Toggle: Crescent Moon in Light Mode, Sun in Dark Mode -->
                     <button 
-                        @click="periodDropdownOpen = !periodDropdownOpen"
-                        class="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition"
+                        @click="toggleTheme()" 
+                        type="button"
+                        class="p-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 transition cursor-pointer"
+                        title="Toggle Light/Dark Theme"
+                        aria-label="Theme"
                     >
-                        <span>Dönemler</span>
-                        <svg class="w-3.5 h-3.5 text-slate-400 transition transform duration-200" :class="{'rotate-180': periodDropdownOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <svg x-show="theme !== 'dark'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg x-show="theme === 'dark'" x-cloak class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </button>
 
-                    <div 
-                        x-show="periodDropdownOpen" 
-                        x-cloak
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 translate-y-1 scale-95"
-                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                        x-transition:leave-end="opacity-0 translate-y-1 scale-95"
-                        class="absolute left-0 mt-2 w-60 ios-glass rounded-2xl shadow-2xl py-2 z-50 divide-y divide-black/5 dark:divide-white/10"
-                    >
-                        <div class="py-1">
-                            <a href="{{ route('home', ['period' => 'roma-imparatorlugu']) }}" class="flex items-center gap-2.5 px-4 py-2 text-xs hover:bg-black/5 dark:hover:bg-white/10 transition">
-                                <span class="text-amber-500">🦅</span>
-                                <span>Roma İmparatorluğu</span>
-                            </a>
-                            <a href="{{ route('home', ['period' => 'bizans-imparatorlugu']) }}" class="flex items-center gap-2.5 px-4 py-2 text-xs hover:bg-black/5 dark:hover:bg-white/10 transition">
-                                <span class="text-amber-500">☦️</span>
-                                <span>Bizans İmparatorluğu</span>
-                            </a>
-                            <a href="{{ route('home', ['period' => 'klasik-hellenistik-grek']) }}" class="flex items-center gap-2.5 px-4 py-2 text-xs hover:bg-black/5 dark:hover:bg-white/10 transition">
-                                <span class="text-amber-500">🦉</span>
-                                <span>Grek & Hellenistik</span>
-                            </a>
-                            <a href="{{ route('home', ['period' => 'osmanli-imparatorlugu']) }}" class="flex items-center gap-2.5 px-4 py-2 text-xs hover:bg-black/5 dark:hover:bg-white/10 transition">
-                                <span class="text-amber-500">🌙</span>
-                                <span>İslami & Osmanlı</span>
-                            </a>
-                        </div>
-                        <div class="pt-1">
-                            <a href="{{ route('periods.index') }}" class="block px-4 py-2 text-[11px] text-amber-600 dark:text-gold-antique font-semibold hover:bg-black/5 dark:hover:bg-white/10">
-                                Tüm Dönem Kataloğu &rarr;
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="{{ route('epigraphy.index') }}" class="px-2.5 py-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition flex items-center gap-1.5">
-                    <span>🔍</span> Lejant Çözücü
-                </a>
-
-                <a href="{{ route('quiz.index') }}" class="px-2.5 py-1.5 rounded-xl text-amber-600 dark:text-gold-antique font-semibold hover:bg-amber-500/10 transition flex items-center gap-1.5">
-                    <span>🎯</span> Günün Sikkesi
-                </a>
-
-                <a href="{{ route('map.index') }}" class="px-2.5 py-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition flex items-center gap-1.5">
-                    <span>🗺️</span> Darphaneler
-                </a>
-
-                <a href="{{ route('collection.index') }}" class="px-3 py-1.5 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 hover:border-amber-500/50 text-slate-800 dark:text-slate-100 transition flex items-center gap-1.5 font-medium shadow-sm">
-                    <span class="text-amber-500">📖</span>
-                    <span>Koleksiyonum</span>
-                </a>
-
-                <!-- 🌓 Apple iPhone Tarzı Beyaz / Dark Tema Geçiş Anahtarı (Segmented Toggle) -->
-                <div class="pl-1">
+                    <!-- Mobile Drawer Toggle Button -->
                     <button 
-                        @click="toggleTheme()"
+                        @click="mobileMenuOpen = !mobileMenuOpen" 
                         type="button"
-                        title="Temayı Değiştir (Beyaz / Dark)"
-                        class="relative inline-flex items-center h-8 p-1 rounded-full bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 backdrop-blur-xl transition duration-300 focus:outline-none"
+                        class="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+                        aria-label="Menu"
                     >
-                        <div 
-                            class="absolute top-1 bottom-1 w-6 rounded-full bg-white dark:bg-slate-800 shadow-sm transition-all duration-300 ease-out border border-black/[0.05] dark:border-white/[0.15]"
-                            :class="currentTheme === 'dark' ? 'left-8' : 'left-1'"
-                        ></div>
-                        <span class="relative z-10 w-6 h-6 flex items-center justify-center text-xs transition duration-200" :class="currentTheme === 'light' ? 'opacity-100 scale-100' : 'opacity-40 scale-90'">
-                            ☀️
-                        </span>
-                        <span class="relative z-10 w-6 h-6 flex items-center justify-center text-xs transition duration-200" :class="currentTheme === 'dark' ? 'opacity-100 scale-100' : 'opacity-40 scale-90'">
-                            🌙
-                        </span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
+
                 </div>
 
-                <!-- Dil & Para Birimi Seçicileri -->
-                <div class="flex items-center gap-1.5 pl-1">
-                    <div class="relative group">
-                        <button class="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-black/5 dark:bg-white/10 text-slate-800 dark:text-slate-200 border border-black/5 dark:border-white/10">
-                            <span>{{ strtoupper(app()->getLocale()) }}</span>
-                            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div class="absolute right-0 mt-1 w-28 ios-glass rounded-xl shadow-xl py-1 hidden group-hover:block z-50">
-                            <a href="{{ route('locale.switch', 'tr') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ app()->getLocale() === 'tr' ? 'text-amber-600 font-bold' : '' }}">🇹🇷 Türkçe</a>
-                            <a href="{{ route('locale.switch', 'en') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ app()->getLocale() === 'en' ? 'text-amber-600 font-bold' : '' }}">🇬🇧 English</a>
-                            <a href="{{ route('locale.switch', 'de') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ app()->getLocale() === 'de' ? 'text-amber-600 font-bold' : '' }}">🇩🇪 Deutsch</a>
-                        </div>
-                    </div>
-
-                    <div class="relative group">
-                        <button class="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                            <span>{{ session('user_currency', 'USD') }}</span>
-                            <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div class="absolute right-0 mt-1 w-28 ios-glass rounded-xl shadow-xl py-1 hidden group-hover:block z-50">
-                            <a href="{{ route('currency.switch', 'USD') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ session('user_currency', 'USD') === 'USD' ? 'text-amber-600 font-bold' : '' }}">$ USD</a>
-                            <a href="{{ route('currency.switch', 'EUR') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ session('user_currency', 'EUR') === 'EUR' ? 'text-amber-600 font-bold' : '' }}">€ EUR</a>
-                            <a href="{{ route('currency.switch', 'TRY') }}" class="block px-3 py-1.5 text-xs hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 {{ session('user_currency', 'TRY') === 'TRY' ? 'text-amber-600 font-bold' : '' }}">₺ TRY</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Mobil Kontroller: Tema Butonu & Hamburger -->
-            <div class="flex items-center gap-2 md:hidden">
-                <!-- Mobil Tema Geçiş Butonu -->
-                <button 
-                    @click="toggleTheme()"
-                    class="p-2 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-slate-700 dark:text-slate-300 focus:outline-none"
-                    aria-label="Tema Değiştir"
-                >
-                    <span x-show="currentTheme === 'light'">🌙</span>
-                    <span x-show="currentTheme === 'dark'" x-cloak>☀️</span>
-                </button>
-
-                <!-- Mobil Menü Aç/Kapat -->
-                <button 
-                    @click="mobileMenuOpen = !mobileMenuOpen" 
-                    class="p-2 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-slate-700 dark:text-slate-300 focus:outline-none"
-                    aria-label="Menü"
-                >
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
             </div>
         </div>
 
-        <!-- Mobil Açılır Menü (iOS Drawer) -->
+        <!-- Mobile Drawer -->
         <div 
             x-show="mobileMenuOpen" 
             x-cloak
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 -translate-y-2 scale-98"
-            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-            x-transition:leave-end="opacity-0 -translate-y-2 scale-98"
-            class="md:hidden mt-2 ios-glass rounded-2xl p-4 space-y-3 shadow-2xl"
+            x-transition
+            class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4 space-y-3 shadow-xl"
         >
-            <form action="{{ route('home') }}" method="GET" class="w-full relative mb-2">
-                <input 
-                    type="text" 
-                    name="q" 
-                    placeholder="Sikke veya lejant ara..." 
-                    class="w-full bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 rounded-xl px-4 py-2.5 pl-10 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
-                >
-                <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </form>
-
-            <div class="space-y-1">
-                <a href="{{ route('home') }}" class="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200">🏛️ Katalog Ana Sayfa</a>
-                <a href="{{ route('periods.index') }}" class="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200">👑 Tarihsel Dönemler</a>
-                <a href="{{ route('epigraphy.index') }}" class="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200">🔍 Epigrafik Lejant Çözücü</a>
-                <a href="{{ route('quiz.index') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold hover:bg-amber-500/10 text-amber-600 dark:text-gold-antique">🎯 Günün Sikkesi Yarışması</a>
-                <a href="{{ route('map.index') }}" class="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200">🗺️ Antik Darphane Haritası</a>
-                <a href="{{ route('collection.index') }}" class="block px-3 py-2 rounded-xl text-sm font-medium bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-gold-antique">📖 Kişisel Koleksiyonum</a>
-            </div>
-
-            <div class="pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-between">
-                <span class="text-xs text-slate-500">Dil / Para Birimi:</span>
-                <div class="flex items-center gap-1.5">
-                    <a href="{{ route('locale.switch', 'tr') }}" class="px-2 py-1 text-xs rounded-lg bg-black/5 dark:bg-white/10 border border-black/5 dark:border-white/10">TR</a>
-                    <a href="{{ route('locale.switch', 'en') }}" class="px-2 py-1 text-xs rounded-lg bg-black/5 dark:bg-white/10 border border-black/5 dark:border-white/10">EN</a>
-                    <a href="{{ route('currency.switch', 'USD') }}" class="px-2 py-1 text-xs rounded-lg bg-amber-500/20 text-amber-700 dark:text-gold-antique font-bold">USD</a>
-                    <a href="{{ route('currency.switch', 'TRY') }}" class="px-2 py-1 text-xs rounded-lg bg-black/5 dark:bg-white/10 border border-black/5 dark:border-white/10">TRY</a>
-                </div>
-            </div>
+            <a href="{{ route('home') }}#catalog" class="block px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">Catalogue</a>
+            <a href="{{ route('periods.index') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">Eras (Kronolojik Dönemler)</a>
+            <a href="{{ route('epigraphy.index') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">Lejant Çözücü</a>
+            <a href="{{ route('collection.index') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold text-amber-700 dark:text-gold-dark hover:bg-amber-500/10">Kişisel Koleksiyonum</a>
         </div>
     </header>
 
@@ -531,114 +435,95 @@
         @yield('content')
     </main>
 
-    <!-- 4. "Haftanın Sikkesi" E-posta Bülteni Kayıt Bileşeni -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 4. Bülten Kayıt Kartı -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         @include('components.newsletter-card', ['source' => 'global_layout'])
     </div>
 
-    <!-- 5. Alt Menü (Footer) - iOS Frosted Glass & Kurumsal Bilgiler -->
-    <footer class="mt-20 border-t border-black/[0.08] dark:border-white/[0.08] text-xs py-14 ios-glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- 5. Corporate Museum Footer (site-footer) -->
+    <footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs py-14 transition duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
             
-            <!-- Sütun 1: Müze & Proje Tanımı -->
+            <!-- Column 1: Museum Identity -->
             <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="text-amber-600 dark:text-gold-antique font-numis font-bold text-base">🏛️</span>
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-amber-700 dark:text-gold-dark font-numis font-bold text-xl">🏛️</span>
                     <h3 class="font-numis font-bold text-slate-900 dark:text-slate-100 text-sm tracking-wider">
-                        NÜMİZMATİK ANSİKLOPEDİSİ
+                        HISTORICAL COIN ENCYCLOPEDIA
                     </h3>
                 </div>
                 <p class="leading-relaxed text-slate-600 dark:text-slate-400 text-xs mb-4">
-                    Antik Grek, Roma İmparatorluğu, Bizans ve İslami medeniyetlere ait sikkelerin tipolojik tasnifi, lejant çözümlemeleri ve akademik nümizmatik referans kütüphanesidir.
+                    Klasik Grek, Roma İmparatorluğu, Bizans, İslami ve Avrupa monarşilerine ait antik sikkelerin bilimsel tasnifi, epigrafik çözümlemeleri ve doğrulanmış müzayede satış referansları ansiklopedisi.
                 </p>
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-[11px] text-slate-700 dark:text-slate-300 font-medium shadow-sm">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Açık Akademik Arşiv</span>
+                    <span>Uluslararası Açık Akademik Arşiv</span>
                 </div>
             </div>
 
-            <!-- Sütun 2: Hiyerarşik Dönem Bağlantıları -->
+            <!-- Column 2: Historical Eras -->
             <div>
-                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-3 uppercase tracking-wider font-numis">Dönemler</h4>
-                <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-                    <li><a href="{{ route('home', ['period' => 'roma-imparatorlugu']) }}" class="hover:text-amber-600 dark:hover:text-gold-antique transition">Roma İmparatorluğu (M.Ö. 27 - M.S. 476)</a></li>
-                    <li><a href="{{ route('home', ['period' => 'bizans-imparatorlugu']) }}" class="hover:text-amber-600 dark:hover:text-gold-antique transition">Bizans İmparatorluğu (M.S. 491 - 1453)</a></li>
-                    <li><a href="{{ route('home', ['period' => 'klasik-hellenistik-grek']) }}" class="hover:text-amber-600 dark:hover:text-gold-antique transition">Klasik & Hellenistik Grek</a></li>
-                    <li><a href="{{ route('home', ['period' => 'osmanli-imparatorlugu']) }}" class="hover:text-amber-600 dark:hover:text-gold-antique transition">Osmanlı & İslami Sikkeler</a></li>
-                    <li><a href="{{ route('periods.index') }}" class="text-amber-600 dark:text-gold-antique hover:underline transition font-semibold">Tüm Dönem Kataloğu &rarr;</a></li>
+                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-4 uppercase tracking-wider font-numis">Kronolojik Dönemler</h4>
+                <ul class="space-y-2.5 text-xs text-slate-600 dark:text-slate-400">
+                    <li><a href="{{ route('home', ['period' => 'roma-imparatorlugu']) }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Roma İmparatorluğu (M.Ö. 27 – M.S. 476)</a></li>
+                    <li><a href="{{ route('home', ['period' => 'bizans-imparatorlugu']) }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Bizans İmparatorluğu (M.S. 491 – 1453)</a></li>
+                    <li><a href="{{ route('home', ['period' => 'klasik-hellenistik-grek']) }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Klasik & Hellenistik Grek</a></li>
+                    <li><a href="{{ route('home', ['period' => 'osmanli-imparatorlugu']) }}" class="hover:text-amber-700 dark:hover:text-gold-dark transition">Osmanlı & İslami Sikkeler</a></li>
+                    <li><a href="{{ route('periods.index') }}" class="text-amber-700 dark:text-gold-dark hover:underline transition font-semibold">Tüm Dönem Kataloğu &rarr;</a></li>
                 </ul>
             </div>
 
-            <!-- Sütun 3: Akademik Kaynaklar & Linked Open Data -->
+            <!-- Column 3: Academic Standards & LOD -->
             <div>
-                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-3 uppercase tracking-wider font-numis">Akademik Standartlar</h4>
-                <div class="flex flex-wrap gap-1.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 mb-3">
-                    <span class="bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-lg">RIC (Roman Imperial)</span>
-                    <span class="bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-lg">RPC (Provincial)</span>
-                    <span class="bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-lg">BMC (British Museum)</span>
-                    <span class="bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-lg">Nomisma.org LOD</span>
-                    <span class="bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-lg">ANS (Numismatics.org)</span>
+                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-4 uppercase tracking-wider font-numis">Akademik Standartlar</h4>
+                <div class="flex flex-wrap gap-1.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 mb-4">
+                    <span class="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-2.5 py-1 rounded">RIC (Roman Imperial)</span>
+                    <span class="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-2.5 py-1 rounded">RPC (Provincial)</span>
+                    <span class="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-2.5 py-1 rounded">BMC (British Museum)</span>
+                    <span class="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-2.5 py-1 rounded">Nomisma.org LOD</span>
+                    <span class="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-2.5 py-1 rounded">ANS (Numismatics.org)</span>
                 </div>
                 <p class="text-[11px] text-slate-500 leading-normal">
-                    Tüm sikke detay sayfaları IIIF Image API 3.0 ve Nomisma.org ontolojisine uygun JSON-LD formatında sunulmaktadır.
+                    Kataloğumuz IIIF Image API 3.0 yüksek çözünürlük mikroskobik inceleme ve Nomisma ontolojisi Linked Open Data standardına tam uyumludur.
                 </p>
             </div>
 
-            <!-- Sütun 4: 2863 Sayılı Kanun & Hukuki Sorumluluk Reddi -->
+            <!-- Column 4: Legal 2863 Compliance -->
             <div>
-                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-3 uppercase tracking-wider font-numis">Yasal Uyarı</h4>
+                <h4 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-4 uppercase tracking-wider font-numis">Yasal Sorumluluk Reddi</h4>
                 <p class="leading-relaxed text-slate-600 dark:text-slate-400 text-[11px] mb-3">
-                    Sitemizde yer alan tüm sikke verileri açık akademik arşivler ve kamuya açık uluslararası müzayede veritabanlarından derlenmiştir.
+                    Sitede sunulan tüm veriler ve görseller uluslararası açık nümizmatik arşivleri, müzeler ve açık müzayede veritabanlarından akademik atıf ilkeleriyle derlenmiştir.
                 </p>
-                <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-[11px] text-slate-700 dark:text-slate-300 shadow-sm">
-                    ⚠️ <strong>2863 Sayılı Kanun Uyarınca:</strong> Tarihi eserlerin ticareti veya aracılığı kesinlikle yasaktır ve sitemizde yapılmamaktadır.
+                <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                    ⚠️ <strong>2863 Sayılı Kanun Kapsamında:</strong> Platform üzerinde kültür varlığı alım-satımı veya definecilik aracılığı kesinlikle yasaktır ve teknik olarak engellenmiştir.
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-black/[0.08] dark:border-white/[0.08] text-center text-slate-500 text-[11px]">
-            &copy; {{ date('Y') }} Antik Sikke Bilgi ve Referans Kataloğu. Apple iOS Kurumsal Cam Tasarımı. Tüm hakları saklıdır.
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 text-[11px]">
+            &copy; {{ date('Y') }} Historical Coin & Numismatic Encyclopedia. Tüm hakları saklıdır. Akademik ve kültürel miras projesidir.
         </div>
     </footer>
 
     <!-- Otomatik Hukuki Aydınlatma ve Onay Modalı -->
     @include('components.legal-modal')
 
-    <!-- Çevrimdışı / Çevrimiçi Ağ Durum Bildirimi (PWA) -->
-    <div id="pwa-offline-pill" class="fixed bottom-4 left-4 z-50 ios-glass text-amber-600 dark:text-gold-antique border border-amber-500/40 text-xs px-4 py-2 rounded-full shadow-2xl hidden items-center gap-2 font-mono">
-        <span class="w-2 h-2 rounded-full bg-gold-antique animate-pulse"></span>
+    <!-- PWA Offline Pill -->
+    <div id="pwa-offline-pill" class="fixed bottom-4 left-4 z-50 museum-card px-4 py-2 text-amber-700 dark:text-gold-dark text-xs hidden items-center gap-2 font-mono">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
         <span>Çevrimdışı Mod (Yerel SQLite)</span>
     </div>
 
-    <!-- PWA & Anti-Scraping Koruması Scriptleri -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then((reg) => console.log('PWA Service Worker aktif:', reg.scope))
-                    .catch((err) => console.warn('PWA Service Worker kaydı başarısız:', err));
+                navigator.serviceWorker.register('/service-worker.js').catch(console.warn);
             });
         }
 
-        function updateNetworkStatus() {
-            const pill = document.getElementById('pwa-offline-pill');
-            if (pill) {
-                if (!navigator.onLine) {
-                    pill.classList.remove('hidden');
-                    pill.classList.add('flex');
-                } else {
-                    pill.classList.remove('flex');
-                    pill.classList.add('hidden');
-                }
-            }
-        }
-        window.addEventListener('online', updateNetworkStatus);
-        window.addEventListener('offline', updateNetworkStatus);
-        updateNetworkStatus();
-
-        // Görsel Kopyalama ve Scraping Koruması
+        // Image copy protection toast
         document.addEventListener('contextmenu', function(e) {
-            if (e.target && (e.target.tagName === 'IMG' || e.target.closest('.aspect-square') || e.target.closest('#ancient-map') || e.target.closest('#openseadragon-canvas'))) {
+            if (e.target && (e.target.tagName === 'IMG' || e.target.closest('.aspect-square') || e.target.closest('#openseadragon-canvas'))) {
                 e.preventDefault();
                 showImageProtectionToast();
                 return false;
@@ -650,14 +535,12 @@
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'image-protection-toast';
-                toast.className = 'fixed bottom-6 right-6 z-50 ios-glass border border-gold-antique/50 text-slate-800 dark:text-gold-light text-xs px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 font-medium transition duration-300 transform translate-y-4 opacity-0 pointer-events-none';
+                toast.className = 'fixed bottom-6 right-6 z-50 museum-card border-amber-500/50 text-slate-900 dark:text-slate-100 text-xs px-4 py-3 shadow-2xl flex items-center gap-2.5 font-medium transition duration-300 transform translate-y-4 opacity-0 pointer-events-none';
                 toast.innerHTML = '<span>🔒</span> <span>Bu nümizmatik arşiv görseli koruma altındadır. 2863 sayılı kanun uyarınca ticari amaçla kopyalanamaz.</span>';
                 document.body.appendChild(toast);
             }
             toast.classList.remove('translate-y-4', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-4', 'opacity-0');
-            }, 3000);
+            setTimeout(() => toast.classList.add('translate-y-4', 'opacity-0'), 3000);
         }
     </script>
 </body>
