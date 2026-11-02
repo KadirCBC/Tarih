@@ -37,10 +37,10 @@
         })();
     </script>
 
-    <!-- Tipografi: SF Pro / Inter & Cinzel Antik Lejant Başlıkları -->
+    <!-- Tipografi: Poppins & Cinzel Antik Lejant Başlıkları -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN & Genişletilmiş Tema Yapılandırması -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -88,7 +88,7 @@
                         numis: ['Cinzel', 'Playfair Display', 'serif'],
                         serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
                         decorative: ['Cinzel Decorative', 'serif'],
-                        sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'SF Pro Text', 'Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Poppins', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
                     },
                     boxShadow: {
                         'ios-glass': '0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.04)',
@@ -136,7 +136,7 @@
             background-color: var(--ios-bg);
             color: var(--ios-text);
             transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }

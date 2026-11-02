@@ -54,8 +54,8 @@ module.exports = {
         numis: ['Cinzel', 'Playfair Display', 'serif'],
         serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
         decorative: ['Cinzel Decorative', 'serif'],
-        // Gövde Metinleri için Modern Sans-Serif
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        // Gövde Metinleri için Modern Sans-Serif (Poppins)
+        sans: ['Poppins', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'numis-gold': '0 0 25px -5px rgba(212, 175, 55, 0.25)',
